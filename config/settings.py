@@ -43,6 +43,9 @@ INSTALLED_APPS = [
 
     # Package apps
     'rest_framework',
+
+    # Developed apps
+    'papapay.home',
 ]
 
 MIDDLEWARE = [
