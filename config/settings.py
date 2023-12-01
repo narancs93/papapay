@@ -10,12 +10,27 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from os.path import abspath, dirname, join
+
+from django.core.exceptions import ImproperlyConfigured
 
 
 def root(*dirs):
     base_dir = join(dirname(__file__), '..')
     return abspath(join(base_dir, *dirs))
+
+
+def get_env_variable(var_name):
+    """Get the environment variable or return exception."""
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = f'Set the {var_name} environment variable'
+        raise ImproperlyConfigured(error_msg)
+
 
 BASE_DIR = root()
 
@@ -84,11 +99,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': root('db.sqlite3'),
-    }
-}
-
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': get_env_variable('DATABASE_NAME'),
+        'USER': get_env_variable('DATABASE_USER'),
+        'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
+        'HOST': get_env_variable('DATABASE_HOST'),
+        'PORT': get_env_variable('DATABASE_PORT'),
+    }}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
