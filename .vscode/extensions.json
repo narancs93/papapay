@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "junstyle.vscode-django-support",
+        "batisteo.vscode-django",
+        "ms-python.isort",
+        "ms-python.python",
+    ]
+}
