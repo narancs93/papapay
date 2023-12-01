@@ -160,4 +160,5 @@ cython_debug/
 #.idea/
 
 
-papapay/static_root
+papapay/staticfiles
+nginx.conf

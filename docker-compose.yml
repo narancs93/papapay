@@ -4,15 +4,30 @@ services:
   web:
     build: .
     container_name: papapay-http
-    ports:
-      - 8000:8000
-    depends_on:
-      db:
-        condition: service_healthy
+    expose:
+      - $GUNICORN_SERVICE_PORT
+    volumes:
+      - static_volume:/usr/src/app/papapay/staticfiles
     env_file:
       - .env
     networks:
       - app_net
+    depends_on:
+      db:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:1.25.3
+    container_name: papapay-nginx-server
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - static_volume:/usr/src/app/papapay/staticfiles
+    ports:
+      - $NGINX_HOST_PORT:$NGINX_CONTAINER_PORT
+    networks:
+      - app_net
+    depends_on:
+      - web
 
   db:
     image: postgres:16.1
@@ -36,3 +51,4 @@ networks:
 
 volumes:
   postgres_data:
+  static_volume:

@@ -9,12 +9,11 @@ RUN pip install -U pip setuptools
 RUN apt-get update && apt-get install -y build-essential python3-dev libpq-dev
 
 # Install dependencies
-COPY requirements.txt .
+WORKDIR /usr/src/app
+COPY . .
+
 RUN apt-get update && \
     pip install --upgrade pip && \
     pip install --no-warn-script-location -r requirements.txt
 
-COPY . /usr/src/app
-WORKDIR /usr/src/app
-
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
