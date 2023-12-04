@@ -16,4 +16,4 @@ RUN apt-get update && \
     pip install --upgrade pip && \
     pip install --no-warn-script-location -r requirements.txt
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${GUNICORN_SERVICE_PORT} config.wsgi:application"]

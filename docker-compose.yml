@@ -3,6 +3,8 @@ version: '3'
 services:
   web:
     build: .
+    environment:
+      - GUNICORN_SERVICE_PORT=$GUNICORN_SERVICE_PORT
     container_name: papapay-http
     expose:
       - $GUNICORN_SERVICE_PORT
