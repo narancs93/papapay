@@ -41,10 +41,10 @@ BASE_DIR = root()
 SECRET_KEY = 'django-insecure-)s9^3#!9)di@a!l(3ls%dum!z8=!aq4jr(&cyi(zzo#(!$@v8+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_env_variable('DEBUG')
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = get_env_variable('ALLOWED_HOSTS').split(',')
+CSRF_TRUSTED_ORIGINS  = ['http://localhost:1337']
 
 # Application definition
 
@@ -100,9 +100,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': get_env_variable('DATABASE_NAME'),
-        'USER': get_env_variable('DATABASE_USER'),
-        'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
+        'NAME': get_env_variable('POSTGRES_DB'),
+        'USER': get_env_variable('POSTGRES_USER'),
+        'PASSWORD': get_env_variable('POSTGRES_PASSWORD'),
         'HOST': get_env_variable('DATABASE_HOST'),
         'PORT': get_env_variable('DATABASE_PORT'),
     }}
@@ -142,7 +142,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = root('papapay/static_root')
+STATIC_ROOT = root('papapay/staticfiles')
 STATICFILES_DIRS = [root('papapay/static')]
 
 # Default primary key field type
