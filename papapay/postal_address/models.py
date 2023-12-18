@@ -5,6 +5,10 @@ class Country(models.Model):
     name = models.CharField(max_length=64, unique=True)
     initials = models.CharField(max_length=3, blank=True)
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f'{self.name} (id={self.id})'
 
@@ -18,6 +22,10 @@ class State(models.Model):
     area_code = models.CharField(max_length=10, blank=True)
     country = models.ForeignKey(Country, related_name='states', on_delete=models.PROTECT)
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f'{self.name} ({self.country.name}) (id={self.id})'
 
@@ -28,6 +36,10 @@ class State(models.Model):
 class City(models.Model):
     name = models.CharField(max_length=255)
     state = models.ForeignKey(State, related_name='cities', on_delete=models.PROTECT)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.name} ({self.state.name}) (id={self.id})'
@@ -41,6 +53,10 @@ class District(models.Model):
     name = models.CharField(max_length=128)
     city = models.ForeignKey(City, related_name='districts', on_delete=models.PROTECT)
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f'{self.name} ({self.city.name}) (id={self.id})'
 
@@ -52,6 +68,10 @@ class Street(models.Model):
     zip_code = models.CharField(max_length=12)
     name = models.CharField(max_length=100)
     district = models.ForeignKey(District, related_name='streets', on_delete=models.PROTECT)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.name} ({self.district.name}) (id={self.id})'
@@ -66,6 +86,10 @@ class PostalAddress(models.Model):
     floor_number = models.CharField(max_length=10, blank=True)
     door_number = models.CharField(max_length=20, blank=True)
     note = models.CharField(max_length=255, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.street.name}, {self.house_number}, {self.floor_number}/{self.door_number} (id={self.id})'
