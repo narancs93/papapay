@@ -27,6 +27,11 @@ class CountryTest(BaseSetupTest):
 
         self.assertEqual(created_country.initials, '')
 
+    def test_international_call_prefix_blank_by_default(self):
+        created_country = Country.objects.create(name='Country without Call Prefix')
+
+        self.assertEqual(created_country.international_call_prefix, '')
+
     def test_str(self):
         expected = f'Example Country (id={self.country.id})'
         actual = str(self.country)

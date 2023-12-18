@@ -4,6 +4,7 @@ from django.db import models
 class Country(models.Model):
     name = models.CharField(max_length=64, unique=True)
     initials = models.CharField(max_length=3, blank=True)
+    international_call_prefix = models.CharField(max_length=8, blank=True, default='')
 
     def save(self, *args, **kwargs):
         self.full_clean()
