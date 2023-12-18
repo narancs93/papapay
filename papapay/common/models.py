@@ -13,7 +13,8 @@ class PhoneNumber(models.Model):
     owner = GenericForeignKey("owner_type", "owner_id")
 
     def __str__(self):
-        return f'{self.name} (id={self.id})'
+        prefix_str = f'+{self.country.international_call_prefix}' or ''
+        return f'{prefix_str} {self.phone_number} (id={self.id})'
 
     class Meta:
         indexes = [
