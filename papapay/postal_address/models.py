@@ -3,7 +3,7 @@ from django.db import models
 
 class Country(models.Model):
     name = models.CharField(max_length=64, unique=True)
-    initials = models.CharField(max_length=3, blank=True)
+    alpha3_code = models.CharField(max_length=3, blank=True)
     international_call_prefix = models.CharField(max_length=8, blank=True, default='')
 
     def save(self, *args, **kwargs):
@@ -19,7 +19,7 @@ class Country(models.Model):
 
 class State(models.Model):
     name = models.CharField(max_length=100)
-    initials = models.CharField(max_length=3, blank=True)
+    abbreviation = models.CharField(max_length=3, blank=True)
     area_code = models.CharField(max_length=10, blank=True)
     country = models.ForeignKey(Country, related_name='states', on_delete=models.PROTECT)
 
