@@ -31,3 +31,30 @@ class RestaurantTest(BaseSetupTest):
                 email_address='example@restaurant.com',
                 postal_address=self.postal_address,
             )
+
+    def test_mandatory_description_is_enforced(self):
+        with self.assertRaises(ValidationError):
+            Restaurant.objects.create(
+                name='Example Restaurant without Description',
+                introduction='Example Restaurant Introduction',
+                email_address='example@restaurant.com',
+                postal_address=self.postal_address,
+            )
+
+    def test_mandatory_introduction_is_enforced(self):
+        with self.assertRaises(ValidationError):
+            Restaurant.objects.create(
+                name='Example Restaurant without Introduction',
+                description='Example Restaurant Description',
+                email_address='example@restaurant.com',
+                postal_address=self.postal_address,
+            )
+
+    def test_mandatory_email_address_is_enforced(self):
+        with self.assertRaises(ValidationError):
+            Restaurant.objects.create(
+                name='Example Restaurant without Email Address',
+                description='Example Restaurant Description',
+                introduction='Example Restaurant Introduction',
+                postal_address=self.postal_address,
+            )
