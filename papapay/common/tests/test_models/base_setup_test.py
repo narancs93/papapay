@@ -11,6 +11,9 @@ class BaseSetupTest(TestCase):
         self.country = Country.objects.create(
             name='United States of America', alpha3_code='USA', international_call_prefix='1')
 
+        self.country_without_prefix = Country.objects.create(
+            name='Example Country', alpha3_code='EXA')
+
         self.postal_address = create_postal_address(
             country_name='United States of America',
             state_name='California',
@@ -31,4 +34,10 @@ class BaseSetupTest(TestCase):
             name='Example Phone Number',
             country=self.country,
             phone_number='6059713695',
+            owner=self.restaurant)
+
+        self.phone_number_without_prefix = PhoneNumber.objects.create(
+            name='Example Phone Number without Prefix',
+            country=self.country_without_prefix,
+            phone_number='6059713600',
             owner=self.restaurant)

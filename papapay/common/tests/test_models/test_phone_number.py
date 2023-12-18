@@ -26,3 +26,9 @@ class PhoneNumberTest(BaseSetupTest):
         actual = str(self.phone_number)
 
         self.assertEqual(expected, actual)
+
+    def test_str_without_prefix(self):
+        expected = f'6059713600 (id={self.phone_number_without_prefix.id})'
+        actual = str(self.phone_number_without_prefix)
+
+        self.assertEqual(expected, actual)

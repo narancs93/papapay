@@ -12,9 +12,12 @@ class PhoneNumber(models.Model):
     owner_id = models.PositiveIntegerField()
     owner = GenericForeignKey("owner_type", "owner_id")
 
+    def get_international_call_prefix(self):
+        return f'+{self.country.international_call_prefix} ' if self.country and \
+            self.country.international_call_prefix else ''
+
     def __str__(self):
-        prefix_str = f'+{self.country.international_call_prefix}' or ''
-        return f'{prefix_str} {self.phone_number} (id={self.id})'
+        return f'{self.get_international_call_prefix()}{self.phone_number} (id={self.id})'
 
     class Meta:
         indexes = [
