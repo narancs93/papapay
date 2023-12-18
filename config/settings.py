@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     # Developed apps
     'papapay.home',
     'papapay.postal_address',
+    'papapay.restaurant',
 ]
 
 MIDDLEWARE = [
