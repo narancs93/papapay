@@ -1,4 +1,7 @@
+from django.core.exceptions import ValidationError
+
 from papapay.restaurant.models import Restaurant
+
 from .base_setup_test import BaseSetupTest
 
 
@@ -18,3 +21,13 @@ class RestaurantTest(BaseSetupTest):
         self.assertEqual(restaurant.introduction, 'Test Restaurant Introduction')
         self.assertEqual(restaurant.email_address, 'test@restaurant.com')
         self.assertEqual(restaurant.postal_address, self.postal_address)
+
+    def test_unique_name_is_enforced(self):
+        with self.assertRaises(ValidationError):
+            Restaurant.objects.create(
+                name='Example Restaurant',
+                description='Example Restaurant Description',
+                introduction='Example Restaurant Introduction',
+                email_address='example@restaurant.com',
+                postal_address=self.postal_address,
+            )
