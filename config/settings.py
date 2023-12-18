@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # Developed apps
+    'papapay.common',
     'papapay.home',
     'papapay.postal_address',
     'papapay.restaurant',
