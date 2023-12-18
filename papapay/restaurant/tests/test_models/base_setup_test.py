@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from papapay.postal_address.utils import create_postal_address
-from papapay.restaurant.models import Restaurant
+from papapay.restaurant.models import Restaurant, SocialMediaAccount
 
 
 class BaseSetupTest(TestCase):
@@ -22,3 +22,9 @@ class BaseSetupTest(TestCase):
             email_address='example@restaurant.com',
             postal_address=self.postal_address
         )
+
+        self.social_media_account = SocialMediaAccount.objects.create(
+                restaurant=self.restaurant,
+                platform='facebook',
+                username='example_username'
+            )

@@ -22,5 +22,12 @@ class SocialMediaAccount(models.Model):
     platform = models.CharField(max_length=20, choices=SOCIAL_MEDIA_CHOICES)
     username = models.CharField(max_length=255)
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.restaurant.name}'s {self.get_platform_display()} Account: {self.username}"
+
+    class Meta:
+        unique_together = ('platform', 'username')
