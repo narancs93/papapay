@@ -1,0 +1,26 @@
+from django.db import models
+from papapay.postal_address.models import PostalAddress
+
+
+class Restaurant(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    introduction = models.TextField()
+    email_address = models.EmailField()
+    postal_address = models.ForeignKey(PostalAddress, related_name='restaurants', on_delete=models.PROTECT)
+
+
+class SocialMediaAccount(models.Model):
+    SOCIAL_MEDIA_CHOICES = [
+        ('facebook', 'Facebook'),
+        ('twitter', 'Twitter'),
+        ('instagram', 'Instagram'),
+        ('tripadvisor', 'Tripadvisor')
+    ]
+
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    platform = models.CharField(max_length=20, choices=SOCIAL_MEDIA_CHOICES)
+    username = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.restaurant.name}'s {self.get_platform_display()} Account: {self.username}"
