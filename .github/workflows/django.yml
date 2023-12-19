@@ -17,17 +17,36 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Copy .env.sample to .env
+      run: |
+        cp .env.sample .env
+
+    - id: dotenv
+      uses: ./.github/actions/dotenv-action
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Copy .env.sample to .env
-      run: |
-        cp .env.sample .env
+
+    services:
+      postgres:
+        image: postgres:latest
+        container_name: postgres_db
+        env:
+          POSTGRES_USER: ${{ steps.dotenv.outputs.postgres_user }}
+          POSTGRES_PASSWORD: ${{ steps.dotenv.outputs.postgres_password }}
+          POSTGRES_DB: ${{ steps.dotenv.outputs.postgres_db }}
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     - name: Run Tests
       run: |
         python manage.py test
