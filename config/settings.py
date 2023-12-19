@@ -44,7 +44,7 @@ SECRET_KEY = 'django-insecure-)s9^3#!9)di@a!l(3ls%dum!z8=!aq4jr(&cyi(zzo#(!$@v8+
 DEBUG = get_env_variable('DEBUG')
 
 ALLOWED_HOSTS = get_env_variable('ALLOWED_HOSTS').split(',')
-CSRF_TRUSTED_ORIGINS  = ['http://localhost:1337']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:1337']
 
 # Application definition
 
