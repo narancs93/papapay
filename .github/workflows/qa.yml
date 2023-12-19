@@ -32,6 +32,7 @@ jobs:
     - name: Copy .env.sample to .env
       run: |
         cp .env.sample .env
+        sed -i 's/DATABASE_HOST=postgres_db/DATABASE_HOST=localhost/' .env
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
