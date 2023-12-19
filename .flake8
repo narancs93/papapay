@@ -1,0 +1,11 @@
+[flake8]
+max-line-length = 119
+exclude =
+    **/migrations/*,
+    .git,
+    .mypy_cache,
+    __pycache__,
+filename = *.py
+accept-encodings = utf-8
+inline-quotes = single
+multiline-quotes = double
