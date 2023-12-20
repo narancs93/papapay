@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # Developed apps
+    'papapay.user',
     'papapay.common',
     'papapay.home',
     'papapay.postal_address',
@@ -128,6 +129,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "user.User"
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
