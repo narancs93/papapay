@@ -6,8 +6,9 @@ from papapay.postal_address.models import (City, Country, District,
 
 class BaseSetupTest(TestCase):
     def setUp(self):
-        self.country = Country.objects.create(name='Example Country', initials='AB')
-        self.state = State.objects.create(name='Example State', initials='AB', area_code='A-001', country=self.country)
+        self.country = Country.objects.create(name='Example Country', alpha3_code='AB')
+        self.state = State.objects.create(
+            name='Example State', abbreviation='AB', area_code='A-001', country=self.country)
         self.city = City.objects.create(name='Example City', state=self.state)
         self.district = District.objects.create(name='Example District', city=self.city)
         self.street = Street.objects.create(name='Example Street', zip_code='ZIP123', district=self.district)

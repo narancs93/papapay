@@ -5,15 +5,15 @@ from .models import City, Country, District, PostalAddress, State, Street
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'initials')
-    search_fields = ('name', 'initials')
+    list_display = ('id', 'name', 'alpha3_code')
+    search_fields = ('name', 'alpha3_code')
 
 
 @admin.register(State)
 class StateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'initials', 'area_code', 'country')
+    list_display = ('id', 'name', 'abbreviation', 'area_code', 'country')
     list_filter = ('country',)
-    search_fields = ('name', 'initials', 'area_code', 'country')
+    search_fields = ('name', 'abbreviation', 'area_code', 'country')
 
 
 @admin.register(City)

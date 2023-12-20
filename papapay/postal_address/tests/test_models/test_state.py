@@ -7,12 +7,12 @@ from .base_setup_test import BaseSetupTest
 
 class StateTest(BaseSetupTest):
     def test_create_and_save_model(self):
-        state = State(name='Test State', initials='XYZ', area_code='XYZ-1', country=self.country)
+        state = State(name='Test State', abbreviation='XYZ', area_code='XYZ-1', country=self.country)
         state.save()
 
         saved_state = State.objects.get(id=state.id)
         self.assertEqual(saved_state.name, 'Test State')
-        self.assertEqual(saved_state.initials, 'XYZ')
+        self.assertEqual(saved_state.abbreviation, 'XYZ')
         self.assertEqual(saved_state.area_code, 'XYZ-1')
         self.assertEqual(saved_state.country, self.country)
 
@@ -28,13 +28,13 @@ class StateTest(BaseSetupTest):
         with self.assertRaises(ValidationError):
             State.objects.create(name='State without Country')
 
-    def test_initials_blank_by_default(self):
-        state = State.objects.create(name='State without Initials', area_code='NOIN', country=self.country)
+    def test_abbreviation_blank_by_default(self):
+        state = State.objects.create(name='State without Abbreviation', area_code='NOIN', country=self.country)
 
-        self.assertEqual(state.initials, '')
+        self.assertEqual(state.abbreviation, '')
 
     def test_area_code_blank_by_default(self):
-        state = State.objects.create(name='State withot Area Code', initials='NAC', country=self.country)
+        state = State.objects.create(name='State withot Area Code', abbreviation='NAC', country=self.country)
 
         self.assertEqual(state.area_code, '')
 
