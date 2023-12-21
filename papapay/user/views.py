@@ -4,7 +4,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import LoginSerializer, RegisterSerializer
+from .serializers import LoginSerializer, SignupSerializer
 
 User = get_user_model()
 
@@ -15,11 +15,11 @@ class SignupView(APIView):
     style = {'template_pack': 'user/serializers/horizontal'}
 
     def get(self, request):
-        serializer = RegisterSerializer()
+        serializer = SignupSerializer()
         return Response({'serializer': serializer, 'style': self.style})
 
     def post(self, request):
-        serializer = RegisterSerializer(data=request.POST)
+        serializer = SignupSerializer(data=request.POST)
         if not serializer.is_valid():
             return Response({'serializer': serializer, 'style': self.style})
         serializer.save()

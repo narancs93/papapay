@@ -6,7 +6,7 @@ from rest_framework.validators import UniqueValidator
 User = get_user_model()
 
 
-class RegisterSerializer(serializers.ModelSerializer):
+class SignupSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
             allow_null=True, allow_blank=True,
             validators=[UniqueValidator(queryset=User.objects.all(), message='This email address is already in use.')]
