@@ -8,28 +8,47 @@ User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-            required=True,
-            validators=[UniqueValidator(queryset=User.objects.all())]
+            allow_null=True, allow_blank=True,
+            validators=[UniqueValidator(queryset=User.objects.all(), message='This email address is already in use.')]
             )
 
     password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password], style={'input_type': 'password'})
+        write_only=True, allow_null=True, allow_blank=True,
+        validators=[validate_password], style={'input_type': 'password'})
     password2 = serializers.CharField(
-        write_only=True, required=True, label='Confirm password', style={'input_type': 'password'})
+        write_only=True, allow_null=True, allow_blank=True, label='Confirm password', style={'input_type': 'password'})
 
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'password', 'password2', )
         extra_kwargs = {
-            'first_name': {'required': True},
-            'last_name': {'required': True}
+            'first_name': {'allow_null': True, 'allow_blank': True},
+            'last_name': {'allow_null': True, 'allow_blank': True}
         }
 
-    def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
+    def validate(self, data):
+        self.validate_inputs_are_not_empty(data)
+        if data['password'] != data['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
 
-        return attrs
+        return data
+
+    def validate_inputs_are_not_empty(self, data):
+        error_message_for_fields = {
+            'first_name': 'First name is required.',
+            'last_name': 'Last name is required.',
+            'email': 'Email address is required.',
+            'password': 'Password is required.',
+            'password2': 'Confirm password is required.'
+        }
+        validation_errors = {}
+
+        for field, error_message in error_message_for_fields.items():
+            if not data.get(field):
+                validation_errors[field] = error_message
+
+        if validation_errors:
+            raise serializers.ValidationError(validation_errors)
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -67,7 +86,7 @@ class LoginSerializer(serializers.Serializer):
         self.user = authenticate(
             request=self.context.get('request'), email=data.get('email'), password=data.get('password'))
         if self.user is None:
-            raise serializers.ValidationError({'password': 'Invalid email or password'})
+            raise serializers.ValidationError({'password': 'Invalid email or password.'})
         return data
 
     def validate_email_and_password_not_empty(self, data):
