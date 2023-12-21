@@ -8,22 +8,23 @@ User = get_user_model()
 
 class SignupSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-            allow_null=True, allow_blank=True,
+            required=False, allow_null=True, allow_blank=True,
             validators=[UniqueValidator(queryset=User.objects.all(), message='This email address is already in use.')]
             )
 
     password = serializers.CharField(
-        write_only=True, allow_null=True, allow_blank=True,
+        required=False, write_only=True, allow_null=True, allow_blank=True,
         validators=[validate_password], style={'input_type': 'password'})
     password2 = serializers.CharField(
-        write_only=True, allow_null=True, allow_blank=True, label='Confirm password', style={'input_type': 'password'})
+        required=False, write_only=True, allow_null=True, allow_blank=True,
+        label='Confirm password', style={'input_type': 'password'})
 
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'password', 'password2', )
         extra_kwargs = {
-            'first_name': {'allow_null': True, 'allow_blank': True},
-            'last_name': {'allow_null': True, 'allow_blank': True}
+            'first_name': {'required': False, 'allow_null': True, 'allow_blank': True},
+            'last_name': {'required': False, 'allow_null': True, 'allow_blank': True},
         }
 
     def validate(self, data):
@@ -37,7 +38,7 @@ class SignupSerializer(serializers.ModelSerializer):
         error_message_for_fields = {
             'first_name': 'First name is required.',
             'last_name': 'Last name is required.',
-            'email': 'Email address is required.',
+            'email': 'Email address is required. Please enter a valid email.',
             'password': 'Password is required.',
             'password2': 'Confirm password is required.'
         }
