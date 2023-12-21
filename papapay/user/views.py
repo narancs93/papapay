@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import redirect
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -45,3 +45,10 @@ class LoginView(APIView):
 
         else:
             return Response({'serializer': serializer, 'style': self.style})
+
+
+class LogoutView(APIView):
+
+    def get(self, request):
+        logout(request)
+        return redirect('papapay.home:home-url')
