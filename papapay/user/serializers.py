@@ -33,7 +33,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create(
-            username=validated_data['email'],
             email=validated_data['email'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name']
@@ -68,7 +67,7 @@ class LoginSerializer(serializers.Serializer):
         self.user = authenticate(
             request=self.context.get('request'), email=data.get('email'), password=data.get('password'))
         if self.user is None:
-            raise serializers.ValidationError({'password': 'Invalid username or password'})
+            raise serializers.ValidationError({'password': 'Invalid email or password'})
         return data
 
     def validate_email_and_password_not_empty(self, data):
