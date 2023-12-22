@@ -1,12 +1,15 @@
 from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.views.generic import TemplateView
 
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import LoginSerializer, SignupSerializer
+from .serializers import (LoginSerializer, PasswordUpdateSerializer,
+                          SignupSerializer, UserProfileSerializer)
 
 User = get_user_model()
 
@@ -58,3 +61,25 @@ class LogoutView(APIView):
     def get(self, request):
         logout(request)
         return redirect('papapay.home:home-url')
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'user/profile.html'
+    style = {'template_pack': 'user/serializers/horizontal'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user = self.request.user
+        profile_serializer = UserProfileSerializer(data={
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+        })
+        if not profile_serializer.is_valid():
+            profile_serializer = UserProfileSerializer()
+
+        context['profile_serializer'] = profile_serializer
+        context['password_update_serializer'] = PasswordUpdateSerializer
+        context['style'] = self.style
+        return context

@@ -40,7 +40,7 @@
                   <span class="px-2">{{ request.user.first_name }}</span>
     
                 <div class="dropdown-content rounded-md">
-                  <a href="#" class="rounded-md">Profile</a>
+                  <a href="{% url "papapay.user:profile" %}" class="rounded-md">Profile</a>
                   <a href="#" class="rounded-md">Orders</a>
                   <a href="{% url "papapay.user:logout" %}" class="rounded-md">Logout</a>
                 </div>

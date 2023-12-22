@@ -101,3 +101,22 @@ class LoginSerializer(serializers.Serializer):
 
         if validation_errors:
             raise serializers.ValidationError(validation_errors)
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.CharField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name')
+
+
+class PasswordUpdateSerializer(serializers.Serializer):
+    password = serializers.CharField(label='Current password')
+    new_password = serializers.CharField(label='New password')
+    new_password2 = serializers.CharField(label='Confirm new password')
+
+    class Meta:
+        fields = ('password', 'new_password', 'new_password2')
