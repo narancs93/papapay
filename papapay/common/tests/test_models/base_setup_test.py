@@ -2,8 +2,8 @@ from django.test import TestCase
 
 from papapay.common.models import PhoneNumber
 from papapay.postal_address.models import Country
-from papapay.restaurant.models import Restaurant
 from papapay.postal_address.utils import create_postal_address
+from papapay.restaurant.models import Restaurant
 
 
 class BaseSetupTest(TestCase):

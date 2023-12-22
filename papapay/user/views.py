@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import redirect
 from django.urls import reverse
+
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView

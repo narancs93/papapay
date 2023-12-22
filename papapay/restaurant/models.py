@@ -1,4 +1,5 @@
 from django.db import models
+
 from papapay.postal_address.models import PostalAddress
 
 

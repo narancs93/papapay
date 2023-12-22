@@ -1,4 +1,5 @@
 [flake8]
+application-import-names = config,papapay
 max-line-length = 119
 exclude =
     **/migrations/*,
