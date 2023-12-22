@@ -24,3 +24,9 @@ class SocialMediaAccountTest(BaseSetupTest):
                     platform='facebook',
                     username='example_username'
                 )
+
+    def test_str(self):
+        expected = 'Example Restaurant\'s Facebook Account: example_username'
+        actual = str(self.social_media_account)
+
+        self.assertEqual(expected, actual)

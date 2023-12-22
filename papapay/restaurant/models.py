@@ -13,6 +13,9 @@ class Restaurant(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return f'{self.name} (id={self.id})'
+
 
 class SocialMediaAccount(models.Model):
     SOCIAL_MEDIA_CHOICES = [
