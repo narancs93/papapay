@@ -58,3 +58,9 @@ class RestaurantTest(BaseSetupTest):
                 introduction='Example Restaurant Introduction',
                 postal_address=self.postal_address,
             )
+
+    def test_str(self):
+        expected = f"Example Restaurant (id={self.restaurant.id})"
+        actual = str(self.restaurant)
+
+        self.assertEqual(expected, actual)
