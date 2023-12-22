@@ -58,7 +58,6 @@ jobs:
       - name: flake8 Lint
         uses: py-actions/flake8@v2
         with:
-          application-import-names: "config,papapay"
           max-line-length: "119"
           plugins: "flake8-import-order flake8-django"
 
