@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load rest_framework %}
+
+{% block content %}
+<div class="py-24 flex flex-1 justify-center h-full items-center text-black">
+    <div class="form-container px-8 w-full md:w-1/2 lg:w-1/3 xl:1/4 2xl:1/6">
+        <form action="" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            {% csrf_token %}
+
+            {% for field in serializer %}
+                {% render_field field style=style %}
+            {% endfor %}
+
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                  Sign Up
+                </button>
+                <span>
+                    Already have an account?
+                    <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="{% url "papapay.user:login" %}">
+                        Log In
+                    </a>
+                </span>
+                
+            </div>
+
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
