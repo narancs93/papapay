@@ -21,7 +21,7 @@ class LogoutTest(TestCase):
         self.client.login(email=self.email, password=self.password)
 
     def test_logout(self):
-        response = self.client.get(reverse('papapay.user:login'))
+        response = self.client.get(reverse('papapay.home:home-url'))
         self.assertEquals(response.status_code, 200)
         self.assertIn('Logout', response.content.decode('utf-8'))
 
@@ -30,6 +30,6 @@ class LogoutTest(TestCase):
         self.assertRedirects(logout_response, reverse('papapay.home:home-url'),
                              status_code=302, target_status_code=200)
 
-        response = self.client.get(reverse('papapay.user:login'))
+        response = self.client.get(reverse('papapay.home:home-url'))
         self.assertEquals(response.status_code, 200)
         self.assertIn('Login', response.content.decode('utf-8'))
