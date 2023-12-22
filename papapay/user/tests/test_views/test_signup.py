@@ -1,3 +1,4 @@
+from django.contrib import auth
 from django.test import Client, TestCase
 from django.urls import reverse
 
@@ -36,6 +37,16 @@ class SignupTest(TestCase):
         self.assertTemplateUsed(response, 'user/signup.html')
         self.assertTrue('serializer' in response.context)
         self.assertIsInstance(response.context['serializer'], SignupSerializer)
+
+    def test_login_GET_redirects_to_home_if_authenticated(self):
+        self.client.login(email=self.email, password=self.password)
+        user = auth.get_user(self.client)
+        response = self.client.get(self.signup_url)
+
+        self.assertTrue(user.is_authenticated)
+        self.assertRedirects(response, expected_url=reverse('papapay.home:home-url'),
+                             status_code=302, target_status_code=200)
+        self.client.logout()
 
     def test_signup_POST_no_data(self):
         response = self.client.post(self.signup_url)
