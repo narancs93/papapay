@@ -76,7 +76,7 @@ class TestLogin(TestCase):
 
     def test_login_POST_wrong_password(self):
         response = self.client.post(self.login_url, data={
-            'email': self.password,
+            'email': self.email,
             'password': 'wrongPassword',
         })
 
