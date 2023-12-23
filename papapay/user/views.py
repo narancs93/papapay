@@ -1,8 +1,8 @@
-from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth import (get_user_model, login, logout,
+                                 update_session_auth_hash)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.contrib.auth import update_session_auth_hash
 
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
