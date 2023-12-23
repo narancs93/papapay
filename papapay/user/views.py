@@ -76,22 +76,22 @@ class ProfileView(LoginRequiredMixin, APIView):
         })
 
     def post(self, request):
-        profile_serializer, password_update_serializer = None, None
-        self.profile_was_updated, self.password_was_updated = False, False
-
         update_type = request.POST.get('_update_type')
-        if update_type == 'profile':
-            profile_serializer = self.update_profile(request)
-        elif update_type == 'password':
-            password_update_serializer = self.update_password(request)
 
-        return Response({
-            'profile_serializer': profile_serializer or self.get_profile_serializer(request.user),
-            'profile_was_updated': self.profile_was_updated,
-            'password_update_serializer': password_update_serializer or PasswordUpdateSerializer(),
-            'password_was_updated': self.password_was_updated,
+        self.initialize_serializers(request)
+        self.initialize_flags()
+        self.perform_update(update_type)
+
+        response_data = {
+            'profile_serializer': self.profile_serializer if update_type == 'profile' else
+            self.get_profile_serializer(request.user),
+            'profile_was_updated': self.profile_updated,
+            'password_update_serializer': self.password_update_serializer if update_type == 'password' else
+            PasswordUpdateSerializer(),
+            'password_was_updated': self.password_updated,
             'style': self.style
-        })
+        }
+        return Response(response_data)
 
     def get_profile_serializer(self, user):
         profile_serializer = UserProfileSerializer(data={
@@ -103,17 +103,21 @@ class ProfileView(LoginRequiredMixin, APIView):
             return profile_serializer
         return UserProfileSerializer()
 
-    def update_profile(self, request):
-        serializer = UserProfileSerializer(instance=request.user, data=request.POST)
-        if serializer.is_valid():
-            serializer.save()
-            self.profile_was_updated = True
-        return serializer
+    def initialize_serializers(self, request):
+        self.profile_serializer = UserProfileSerializer(instance=request.user, data=request.data)
+        self.password_update_serializer = PasswordUpdateSerializer(instance=request.user, data=request.data)
 
-    def update_password(self, request):
-        serializer = PasswordUpdateSerializer(instance=request.user, data=request.POST)
-        if serializer.is_valid():
-            serializer.save()
-            update_session_auth_hash(request, request.user)
-            self.password_was_updated = True
-        return serializer
+    def initialize_flags(self):
+        self.profile_updated = False
+        self.password_updated = False
+
+    def perform_update(self, update_type):
+        if update_type == 'profile':
+            if self.profile_serializer.is_valid():
+                self.profile_serializer.save()
+                self.profile_updated = True
+        elif update_type == 'password':
+            if self.password_update_serializer.is_valid():
+                self.password_update_serializer.save()
+                self.password_updated = True
+                update_session_auth_hash(self.request, self.request.user)
