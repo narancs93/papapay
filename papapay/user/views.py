@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.contrib.auth import update_session_auth_hash
 
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -68,16 +69,51 @@ class ProfileView(LoginRequiredMixin, APIView):
     style = {'template_pack': 'user/serializers/horizontal'}
 
     def get(self, request):
-        user = request.user
+        return Response({
+            'profile_serializer': self.get_profile_serializer(request.user),
+            'password_update_serializer': PasswordUpdateSerializer(),
+            'style': self.style
+        })
+
+    def post(self, request):
+        profile_serializer, password_update_serializer = None, None
+        self.profile_was_updated, self.password_was_updated = False, False
+
+        update_type = request.POST.get('_update_type')
+        if update_type == 'profile':
+            profile_serializer = self.update_profile(request)
+        elif update_type == 'password':
+            password_update_serializer = self.update_password(request)
+
+        return Response({
+            'profile_serializer': profile_serializer or self.get_profile_serializer(request.user),
+            'profile_was_updated': self.profile_was_updated,
+            'password_update_serializer': password_update_serializer or PasswordUpdateSerializer(),
+            'password_was_updated': self.password_was_updated,
+            'style': self.style
+        })
+
+    def get_profile_serializer(self, user):
         profile_serializer = UserProfileSerializer(data={
             'email': user.email,
             'first_name': user.first_name,
             'last_name': user.last_name,
         })
-        if not profile_serializer.is_valid():
-            profile_serializer = UserProfileSerializer()
-        return Response({
-            'profile_serializer': profile_serializer,
-            'password_update_serializer': PasswordUpdateSerializer(),
-            'style': self.style
-        })
+        if profile_serializer.is_valid():
+            return profile_serializer
+        return UserProfileSerializer()
+
+    def update_profile(self, request):
+        serializer = UserProfileSerializer(instance=request.user, data=request.POST)
+        if serializer.is_valid():
+            serializer.save()
+            self.profile_was_updated = True
+        return serializer
+
+    def update_password(self, request):
+        serializer = PasswordUpdateSerializer(instance=request.user, data=request.POST)
+        if serializer.is_valid():
+            serializer.save()
+            update_session_auth_hash(request, request.user)
+            self.password_was_updated = True
+        return serializer
