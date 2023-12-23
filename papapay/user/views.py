@@ -99,9 +99,8 @@ class ProfileView(LoginRequiredMixin, APIView):
             'first_name': user.first_name,
             'last_name': user.last_name,
         })
-        if profile_serializer.is_valid():
-            return profile_serializer
-        return UserProfileSerializer()
+        profile_serializer.is_valid()
+        return profile_serializer
 
     def initialize_serializers(self, request):
         self.profile_serializer = UserProfileSerializer(instance=request.user, data=request.data)
