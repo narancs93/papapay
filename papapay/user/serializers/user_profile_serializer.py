@@ -6,7 +6,7 @@ User = get_user_model()
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    email = serializers.CharField()
+    email = serializers.EmailField()
     first_name = serializers.CharField()
     last_name = serializers.CharField()
 
