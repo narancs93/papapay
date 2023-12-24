@@ -9,6 +9,15 @@ User = get_user_model()
 USER_CONTENT_TYPE = ContentType.objects.get(app_label='user', model='user')
 
 
+class PhoneNumberChoice:
+    def __init__(self, phone_number, id):
+        self.phone_number = phone_number
+        self.id = id
+
+    def __str__(self):
+        return self.phone_number
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=False, allow_null=True, allow_blank=True)
     first_name = serializers.CharField(required=False, allow_null=True, allow_blank=True)
@@ -29,7 +38,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         try:
             user = User.objects.get(email=self.initial_data.get('email'))
             self.fields['phone_numbers'].choices = [
-                repr(phone_number) for phone_number
+                PhoneNumberChoice(repr(phone_number), phone_number.id) for phone_number
                 in PhoneNumber.objects.filter(owner_id=user.id, owner_type=USER_CONTENT_TYPE)
             ]
         except User.DoesNotExist:

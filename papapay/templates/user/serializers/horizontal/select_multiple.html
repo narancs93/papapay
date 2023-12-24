@@ -16,7 +16,7 @@
         {% elif select.end_option_group %}
           </optgroup>
         {% else %}
-          <option value="{{ select.value }}" {% if select.value|as_string in field.value|as_list_of_strings %}selected{% endif %} {% if select.disabled %}disabled{% endif %}>{{ select.display_text }}</option>
+          <option value="{{ select.value.id }}" {% if select.value|as_string in field.value|as_list_of_strings %}selected{% endif %} {% if select.disabled %}disabled{% endif %}>{{ select.display_text }}</option>
         {% endif %}
     {% empty %}
         <option>
