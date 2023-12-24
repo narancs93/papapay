@@ -20,6 +20,9 @@ class PhoneNumber(models.Model):
     def __str__(self):
         return f'{self.get_international_call_prefix()}{self.phone_number} (id={self.id})'
 
+    def __repr__(self):
+        return f'{self.name} ({self.get_international_call_prefix()}{self.phone_number})'
+
     class Meta:
         indexes = [
             models.Index(fields=["owner_id", "owner_id"]),
