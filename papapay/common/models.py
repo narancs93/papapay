@@ -14,7 +14,7 @@ class PhoneNumber(models.Model):
     owner = GenericForeignKey("owner_type", "owner_id")
 
     def get_international_call_prefix(self):
-        return f'+{self.country.international_call_prefix} ' if self.country and \
+        return f'{self.country.international_call_prefix} ' if self.country and \
             self.country.international_call_prefix else ''
 
     def __str__(self):

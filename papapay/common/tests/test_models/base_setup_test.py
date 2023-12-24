@@ -9,7 +9,7 @@ from papapay.restaurant.models import Restaurant
 class BaseSetupTest(TestCase):
     def setUp(self):
         self.country = Country.objects.create(
-            name='United States of America', alpha3_code='USA', international_call_prefix='1')
+            name='United States of America', alpha3_code='USA', international_call_prefix='+1')
 
         self.country_without_prefix = Country.objects.create(
             name='Example Country', alpha3_code='EXA')
