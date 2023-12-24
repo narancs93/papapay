@@ -4,6 +4,7 @@ Django==5.0
 djangorestframework==3.14.0
 gunicorn==21.2.0
 packaging==23.2
+phonenumbers==8.13.27
 psycopg2==2.9.9
 pycountry==23.12.11
 python-dotenv==1.0.0
