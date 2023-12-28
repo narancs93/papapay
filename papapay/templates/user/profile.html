@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load rest_framework %}
+{% load static %}
 
 
 {% block content %}
@@ -12,13 +13,15 @@
                 <h3 class="text-green-700 text-lg py-2">Your profile has been updated successfully.</h3>
                 {% endif %}
 
-                <form action="" method="POST">
+                <form id="profile-update-form" action="" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="_update_type" value="profile">
         
                     {% for field in profile_serializer %}
                         {% render_field field style=style %}
                     {% endfor %}
+
+                    <select name="phone_numbers" id="phone-numbers" class="hidden" multiple></select>
         
                     <div class="flex items-center justify-between pt-4">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -55,3 +58,8 @@
         </div>
     </div>
 {% endblock content %}
+
+
+{% block javascript %}
+    <script src="{% static 'js/user/profile.js' %}"></script>
+{% endblock javascript %}

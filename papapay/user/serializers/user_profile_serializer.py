@@ -18,14 +18,30 @@ class PhoneNumberChoice:
         return self.phone_number
 
 
+class PhoneNumbersChoiceField(serializers.MultipleChoiceField):
+
+    def to_internal_value(self, data, *args, **kwargs):
+        data = list(map(lambda x: int(x), data))
+        phone_number_id_choices = (choice.id for choice in self.choices)
+        phone_numbers = set()
+
+        for phone_number_id in data:
+            if phone_number_id in phone_number_id_choices:
+                phone_numbers.add(PhoneNumber.objects.get(pk=phone_number_id))
+            else:
+                pass
+
+        return phone_numbers
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=False, allow_null=True, allow_blank=True)
     first_name = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     last_name = serializers.CharField(required=False, allow_null=True, allow_blank=True)
-    phone_numbers = serializers.ChoiceField(
+    phone_numbers = PhoneNumbersChoiceField(
         choices=[], required=False, allow_null=True, allow_blank=True,
         style={
-            'base_template': 'select_multiple.html',
+            'base_template': 'phone_numbers.html',
             'no_items_message': 'You do not have any phone numbers configured yet.'
         })
 
@@ -63,3 +79,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
         if validation_errors:
             raise serializers.ValidationError(validation_errors)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        user = User.objects.get(email=self.validated_data['email'])
+        current_phone_numbers = list(PhoneNumber.objects.filter(owner_id=user.id, owner_type=USER_CONTENT_TYPE))
+        updated_phone_numbers = [phone_number for phone_number in self.validated_data['phone_numbers']]
+
+        phone_number_ids_to_remove = [pn.id for pn in current_phone_numbers if pn not in updated_phone_numbers]
+        PhoneNumber.objects.filter(
+            id__in=phone_number_ids_to_remove,
+            owner_type=USER_CONTENT_TYPE, owner_id=user.id).delete()
