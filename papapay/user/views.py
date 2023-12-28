@@ -4,9 +4,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 
+from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from papapay.common.models import PhoneNumber
 
 from .serializers import (LoginSerializer, PasswordUpdateSerializer,
                           SignupSerializer, UserProfileSerializer)
@@ -72,6 +75,7 @@ class ProfileView(LoginRequiredMixin, APIView):
         return Response({
             'profile_serializer': self.get_profile_serializer(request.user),
             'password_update_serializer': PasswordUpdateSerializer(),
+            'remove_phone_number_from_profile_api': reverse('papapay.user:remove-phone-number-from-profile-api'),
             'style': self.style
         })
 
@@ -120,3 +124,17 @@ class ProfileView(LoginRequiredMixin, APIView):
                 self.password_update_serializer.save()
                 self.password_updated = True
                 update_session_auth_hash(self.request, self.request.user)
+
+
+class RemovePhoneNumberFromUser(APIView):
+
+    def post(self, request):
+        phone_number_id = request.data.get('phone_number_id')
+
+        if phone_number_id:
+            phone_number = PhoneNumber.objects.filter(id=phone_number_id)
+            if phone_number.exists() and phone_number[0].owner == request.user:
+                phone_number[0].delete()
+                return Response('Phone number deleted successfully.', status=status.HTTP_200_OK)
+
+        return Response('Invalid request', status=status.HTTP_400_BAD_REQUEST)

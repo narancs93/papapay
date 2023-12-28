@@ -61,5 +61,6 @@
 
 
 {% block javascript %}
+    {{ remove_phone_number_from_profile_api|json_script:"remove-phone-number-url" }}
     <script src="{% static 'js/user/profile.js' %}"></script>
 {% endblock javascript %}
