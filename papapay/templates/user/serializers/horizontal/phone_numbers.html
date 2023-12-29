@@ -3,11 +3,19 @@
 {% trans "No items to select." as no_items %}
 
 <div class="form-group {% if field.errors %}has-error{% endif %} {{ style.form_group_classes }}">
-    {% if field.label %}
-        <label class="col-sm-2 control-label block text-gray-700 font-bold mb-2 {% if style.hide_label %}sr-only{% endif %}">
-        {{ field.label }}
-        </label>
-    {% endif %}
+    <div class="flex flex-row justify-between">
+        {% if field.label %}
+            <label class="col-sm-2 control-label block text-gray-700 font-bold mb-2 {% if style.hide_label %}sr-only{% endif %}">
+            {{ field.label }}
+            </label>
+        {% endif %}
+
+        <div>
+            <div id="add-phone-number-button" class="bg-blue-500 hover:bg-blue-700 text-sm text-white font-bold py-1 px-4 rounded cursor-pointer">
+                Add
+            </div>
+        </div>
+    </div>
 
     <div class="flex flex-col overflow-auto max-h-40 border rounded shadow">
         <div class="px-4">

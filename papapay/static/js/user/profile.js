@@ -41,4 +41,16 @@ document.querySelectorAll('.phone-number-delete').forEach((element) => {
             }
         });
     })
-})
+});
+
+
+document.getElementById('add-phone-number-button').addEventListener('click', (event) => {
+    document.getElementById('add-phone-number-modal').classList.toggle('hidden')
+});
+
+document.querySelectorAll('.close-modal-button').forEach((element) => {
+    element.addEventListener('click', (event) => {
+        const modalId = event.target.getAttribute('data-target');
+        document.getElementById(modalId).classList.toggle('hidden');
+    })
+});
