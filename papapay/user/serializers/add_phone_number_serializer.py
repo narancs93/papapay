@@ -29,3 +29,12 @@ class AddPhoneNumberSerializer(serializers.Serializer):
             owner_type=USER_CONTENT_TYPE
         )
         return phone_number
+
+    def update(self, instance, validated_data):
+        country = Country.objects.get(alpha2_code=self.alpha2_code.upper())
+        instance.name = validated_data['name']
+        instance.country = country
+        instance.phone_number = remove_prefix(validated_data['phone_number'], country.international_call_prefix)
+        instance.save()
+
+        return instance

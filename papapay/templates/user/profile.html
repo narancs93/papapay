@@ -78,6 +78,7 @@
                     <form id="add-phone-number-form" action="" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="_update_type" value="add_phone_number">
+                        <input type="hidden" name="phone_number_id" value="">
             
                         {% for field in add_phone_number_serializer %}
                             {% render_field field style=style %}

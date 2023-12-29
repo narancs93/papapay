@@ -77,6 +77,7 @@ class ProfileView(LoginRequiredMixin, APIView):
             'profile_serializer': self.get_profile_serializer(request.user),
             'password_update_serializer': PasswordUpdateSerializer(),
             'add_phone_number_serializer': AddPhoneNumberSerializer(),
+            'update_phone_number_serializer': AddPhoneNumberSerializer(),
             'remove_phone_number_from_profile_api': reverse('papapay.user:remove-phone-number-from-profile-api'),
             'style': self.style
         })
@@ -99,6 +100,9 @@ class ProfileView(LoginRequiredMixin, APIView):
                 self.password_updated,
             'add_phone_number_serializer':
                 self.add_phone_number_serializer if update_type == 'add_phone_number' else AddPhoneNumberSerializer(),
+            'update_phone_number_serializer':
+                self.update_phone_number_serializer if
+                update_type == 'update_phone_number' else AddPhoneNumberSerializer(),
             'style': self.style
         }
         return Response(response_data)
@@ -118,6 +122,16 @@ class ProfileView(LoginRequiredMixin, APIView):
         self.add_phone_number_serializer = AddPhoneNumberSerializer(
             user=request.user, alpha2_code=request.data.get('alpha2_code'), data=request.data)
 
+        phone_number_id = request.data.get('phone_number_id')
+        if phone_number_id:
+            phone_number = PhoneNumber.objects.get(id=phone_number_id)
+            self.update_phone_number_serializer = AddPhoneNumberSerializer(
+                instance=phone_number,
+                user=request.user,
+                alpha2_code=request.data.get('alpha2_code'),
+                data=request.data
+            )
+
     def initialize_flags(self):
         self.profile_updated = False
         self.password_updated = False
@@ -132,6 +146,8 @@ class ProfileView(LoginRequiredMixin, APIView):
             update_session_auth_hash(self.request, self.request.user)
         elif update_type == 'add_phone_number' and self.add_phone_number_serializer.is_valid():
             self.add_phone_number_serializer.save()
+        elif update_type == 'update_phone_number' and self.update_phone_number_serializer.is_valid():
+            self.update_phone_number_serializer.save()
 
 
 class RemovePhoneNumberFromUser(APIView):

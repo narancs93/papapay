@@ -51,13 +51,43 @@ document.querySelectorAll('.phone-number-delete').forEach((element) => {
 
 
 document.getElementById('add-phone-number-button').addEventListener('click', (event) => {
+    const form = document.getElementById('add-phone-number-form');
+    document.getElementById('save-phone-number-button').textContent='Save';
     document.getElementById('add-phone-number-modal').classList.toggle('hidden');
+    form.querySelector('[name="_update_type"]').value = 'add_phone_number';
+    form.querySelector('[name="phone_number_id"]').value = '';
+    
     setPhoneNumberFormValues(document.getElementById('add-phone-number-form'), {
         name: '',
         country: 'us',
         number: ''
     });
 });
+
+
+document.querySelectorAll('.phone-number-update').forEach((element) => {
+    element.addEventListener('click', (event) => {
+        const form = document.getElementById('add-phone-number-form');
+        document.getElementById('save-phone-number-button').textContent='Update';
+        document.getElementById('add-phone-number-modal').classList.toggle('hidden');
+        form.querySelector('[name="_update_type"]').value = 'update_phone_number';
+
+        const updateEl = event.target.closest('.phone-number-update');
+        const phoneNumberId = updateEl.getAttribute('data-phone-number-id');
+        const phoneNumberName = updateEl.getAttribute('data-phone-number-name');
+        const phoneNumberAlpha2Code = updateEl.getAttribute('data-phone-number-alpha2-code');
+        const phoneNumber = updateEl.getAttribute('data-phone-number');
+
+        form.querySelector('[name="phone_number_id"]').value = phoneNumberId;
+
+        setPhoneNumberFormValues(document.getElementById('add-phone-number-form'), {
+            name: phoneNumberName,
+            country: phoneNumberAlpha2Code.toLowerCase(),
+            number: phoneNumber
+        });
+    })
+})
+
 
 document.querySelectorAll('.close-modal-button').forEach((element) => {
     element.addEventListener('click', (event) => {
@@ -68,8 +98,8 @@ document.querySelectorAll('.close-modal-button').forEach((element) => {
 
 function setPhoneNumberFormValues(form, {name, country, number}) {
     form.querySelector('[name="name"]').value = name;
+    form.querySelector('[name="phone_number"]').value = number;
     phoneNumberInput.setCountry(country);
-    phoneNumberInput.setNumber(number);
 }
 
 function validatePhoneNumber(input) {
@@ -88,12 +118,14 @@ function validatePhoneNumber(input) {
     return errorMessage;
 }
 
+
 function displayPhoneNumberError(error) {
     const errorElement = document.getElementById('add-phone-number-error');
     errorElement.classList.remove('hidden');
     errorElement.classList.add('text-red-500', 'pb-2')
     errorElement.textContent = error;
 }
+
 
 document.getElementById('save-phone-number-button').addEventListener('click', () => {
     let errorMessage = validatePhoneNumber(phoneNumberInput);
@@ -119,10 +151,10 @@ document.getElementById('save-phone-number-button').addEventListener('click', ()
         csrfToken: csrfToken,
         body: JSON.stringify(data),
     })
-    .then((response) => {
+    .then(() => {
         location.reload();
     })
-    .catch((response) => {
+    .catch(() => {
         displayPhoneNumberError('Something went wrong.');
     })
 });
