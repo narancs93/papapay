@@ -11,8 +11,9 @@ from rest_framework.views import APIView
 
 from papapay.common.models import PhoneNumber
 
-from .serializers import (LoginSerializer, PasswordUpdateSerializer,
-                          SignupSerializer, UserProfileSerializer)
+from .serializers import (AddPhoneNumberSerializer, LoginSerializer,
+                          PasswordUpdateSerializer, SignupSerializer,
+                          UserProfileSerializer)
 
 User = get_user_model()
 
@@ -75,12 +76,13 @@ class ProfileView(LoginRequiredMixin, APIView):
         return Response({
             'profile_serializer': self.get_profile_serializer(request.user),
             'password_update_serializer': PasswordUpdateSerializer(),
+            'add_phone_number_serializer': AddPhoneNumberSerializer(),
             'remove_phone_number_from_profile_api': reverse('papapay.user:remove-phone-number-from-profile-api'),
             'style': self.style
         })
 
     def post(self, request):
-        update_type = request.POST.get('_update_type')
+        update_type = request.data.get('_update_type')
 
         self.initialize_serializers(request)
         self.initialize_flags()
@@ -93,6 +95,8 @@ class ProfileView(LoginRequiredMixin, APIView):
             'password_update_serializer': self.password_update_serializer if update_type == 'password' else
             PasswordUpdateSerializer(),
             'password_was_updated': self.password_updated,
+            'add_phone_number_serializer': self.add_phone_number_serializer if update_type == 'phone_number' else
+            AddPhoneNumberSerializer(),
             'style': self.style
         }
         return Response(response_data)
@@ -109,21 +113,25 @@ class ProfileView(LoginRequiredMixin, APIView):
     def initialize_serializers(self, request):
         self.profile_serializer = UserProfileSerializer(instance=request.user, data=request.data)
         self.password_update_serializer = PasswordUpdateSerializer(instance=request.user, data=request.data)
+        self.add_phone_number_serializer = AddPhoneNumberSerializer(
+            user=request.user, alpha2_code=request.data.get('alpha2_code'), data=request.data)
 
     def initialize_flags(self):
         self.profile_updated = False
         self.password_updated = False
+        self.phone_number_updated = False
 
     def perform_update(self, update_type):
-        if update_type == 'profile':
-            if self.profile_serializer.is_valid():
-                self.profile_serializer.save()
-                self.profile_updated = True
-        elif update_type == 'password':
-            if self.password_update_serializer.is_valid():
-                self.password_update_serializer.save()
-                self.password_updated = True
-                update_session_auth_hash(self.request, self.request.user)
+        if update_type == 'profile' and self.profile_serializer.is_valid():
+            self.profile_serializer.save()
+            self.profile_updated = True
+        elif update_type == 'password' and self.password_update_serializer.is_valid():
+            self.password_update_serializer.save()
+            self.password_updated = True
+            update_session_auth_hash(self.request, self.request.user)
+        elif update_type == 'phone_number' and self.add_phone_number_serializer.is_valid():
+            self.add_phone_number_serializer.save()
+            self.phone_number_updated = True
 
 
 class RemovePhoneNumberFromUser(APIView):

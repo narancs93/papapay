@@ -3,6 +3,12 @@
 {% load static %}
 
 
+{% block css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
+    <link rel="stylesheet" href="{% static 'css/users/profile.css' %}">
+{% endblock css %}
+
+
 {% block content %}
     <div class="py-12 flex flex-col">
         <h1 class="flex justify-center text-gray-800 text-2xl py-6">Profile</h1>
@@ -64,16 +70,24 @@
                 <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-            <div class="inline-block align-center bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+            <div class="inline-block align-center bg-white rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 text-gray-800">
-                    <label class="font-medium text-gray-800">Name</label>
-                    <input type="text" class="w-full outline-none rounded bg-gray-100 p-2 mt-2 mb-3" />
-                    <label class="font-medium text-gray-800">Phone number</label>
-                    <input type="text" class="w-full outline-none rounded bg-gray-100 p-2 mt-2 mb-3" />
+
+                    <div id="add-phone-number-error" class="hidden"></div>
+
+                    <form id="add-phone-number-form" action="" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="_update_type" value="phone_number">
+            
+                        {% for field in add_phone_number_serializer %}
+                            {% render_field field style=style %}
+                        {% endfor %}
+                    </form>
+
                 </div>
                 <div class="bg-gray-200 px-4 py-3 text-right">
                     <button type="button" class="py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2 close-modal-button" data-target="add-phone-number-modal"><i class="fas fa-times"></i> Cancel</button>
-                    <button type="button" class="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 mr-2"><i class="fas fa-plus"></i> Create</button>
+                    <button id="save-phone-number-button" type="button" class="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 mr-2"><i class="fas fa-plus"></i> Save</button>
                 </div>
             </div>
         </div>
@@ -82,6 +96,8 @@
 
 
 {% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.js"></script>
+
     {{ remove_phone_number_from_profile_api|json_script:"remove-phone-number-url" }}
     <script src="{% static 'js/user/profile.js' %}"></script>
 {% endblock javascript %}
