@@ -43,6 +43,7 @@ jobs:
         pip install -r requirements.txt
     - name: Run migrations
       run: |
+        python manage.py migrate contenttypes
         python manage.py migrate
     - name: Run Tests
       run: |
