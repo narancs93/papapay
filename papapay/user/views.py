@@ -121,7 +121,6 @@ class ProfileView(LoginRequiredMixin, APIView):
     def initialize_flags(self):
         self.profile_updated = False
         self.password_updated = False
-        self.phone_number_updated = False
 
     def perform_update(self, update_type):
         if update_type == 'profile' and self.profile_serializer.is_valid():
@@ -133,7 +132,6 @@ class ProfileView(LoginRequiredMixin, APIView):
             update_session_auth_hash(self.request, self.request.user)
         elif update_type == 'add_phone_number' and self.add_phone_number_serializer.is_valid():
             self.add_phone_number_serializer.save()
-            self.phone_number_updated = True
 
 
 class RemovePhoneNumberFromUser(APIView):
