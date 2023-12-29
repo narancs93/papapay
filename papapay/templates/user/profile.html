@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% load rest_framework %}
+{% load static %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
+    <link rel="stylesheet" href="{% static 'css/users/profile.css' %}">
+{% endblock css %}
 
 
 {% block content %}
@@ -12,15 +19,17 @@
                 <h3 class="text-green-700 text-lg py-2">Your profile has been updated successfully.</h3>
                 {% endif %}
 
-                <form action="" method="POST">
+                <form id="profile-update-form" action="" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="_update_type" value="profile">
         
                     {% for field in profile_serializer %}
                         {% render_field field style=style %}
                     {% endfor %}
+
+                    <select name="phone_numbers" id="phone-numbers" class="hidden" multiple></select>
         
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between pt-4">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                           Update profile
                         </button>
@@ -54,4 +63,42 @@
             </div>
         </div>
     </div>
+
+    <div class="fixed z-10 overflow-y-auto top-0 w-full left-0 hidden" id="add-phone-number-modal">
+        <div class="flex items-center justify-center min-height-100vh pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity">
+                <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            <div class="inline-block align-center bg-white rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 text-gray-800">
+
+                    <div id="add-phone-number-error" class="hidden"></div>
+
+                    <form id="add-phone-number-form" action="" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="_update_type" value="add_phone_number">
+                        <input type="hidden" name="phone_number_id" value="">
+            
+                        {% for field in add_phone_number_serializer %}
+                            {% render_field field style=style %}
+                        {% endfor %}
+                    </form>
+
+                </div>
+                <div class="bg-gray-200 px-4 py-3 text-right">
+                    <button type="button" class="py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2 close-modal-button" data-target="add-phone-number-modal"><i class="fas fa-times"></i> Cancel</button>
+                    <button id="save-phone-number-button" type="button" class="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 mr-2"><i class="fas fa-plus"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
+
+
+{% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.js"></script>
+
+    {{ remove_phone_number_from_profile_api|json_script:"remove-phone-number-url" }}
+    <script src="{% static 'js/user/profile.js' %}"></script>
+{% endblock javascript %}

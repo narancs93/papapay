@@ -3,6 +3,7 @@ from django.db import models
 
 class Country(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    alpha2_code = models.CharField(max_length=2, blank=True)
     alpha3_code = models.CharField(max_length=3, blank=True)
     international_call_prefix = models.CharField(max_length=8, blank=True, default='')
 
