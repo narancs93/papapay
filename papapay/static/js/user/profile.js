@@ -96,9 +96,6 @@ function displayPhoneNumberError(error) {
 }
 
 document.getElementById('save-phone-number-button').addEventListener('click', () => {
-    console.log(phoneNumberInput.getValidationError());
-    console.log(phoneNumberInput.isValidNumber());
-
     let errorMessage = validatePhoneNumber(phoneNumberInput);
     if (errorMessage) {
         displayPhoneNumberError(errorMessage);
