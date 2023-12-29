@@ -89,14 +89,16 @@ class ProfileView(LoginRequiredMixin, APIView):
         self.perform_update(update_type)
 
         response_data = {
-            'profile_serializer': self.profile_serializer if update_type == 'profile' else
-            self.get_profile_serializer(request.user),
-            'profile_was_updated': self.profile_updated,
-            'password_update_serializer': self.password_update_serializer if update_type == 'password' else
-            PasswordUpdateSerializer(),
-            'password_was_updated': self.password_updated,
-            'add_phone_number_serializer': self.add_phone_number_serializer if update_type == 'add_phone_number' else
-            AddPhoneNumberSerializer(),
+            'profile_serializer':
+                self.profile_serializer if update_type == 'profile' else self.get_profile_serializer(request.user),
+            'profile_was_updated':
+                self.profile_updated,
+            'password_update_serializer':
+                self.password_update_serializer if update_type == 'password' else PasswordUpdateSerializer(),
+            'password_was_updated':
+                self.password_updated,
+            'add_phone_number_serializer':
+                self.add_phone_number_serializer if update_type == 'add_phone_number' else AddPhoneNumberSerializer(),
             'style': self.style
         }
         return Response(response_data)
