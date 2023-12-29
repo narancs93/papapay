@@ -95,7 +95,7 @@ class ProfileView(LoginRequiredMixin, APIView):
             'password_update_serializer': self.password_update_serializer if update_type == 'password' else
             PasswordUpdateSerializer(),
             'password_was_updated': self.password_updated,
-            'add_phone_number_serializer': self.add_phone_number_serializer if update_type == 'phone_number' else
+            'add_phone_number_serializer': self.add_phone_number_serializer if update_type == 'add_phone_number' else
             AddPhoneNumberSerializer(),
             'style': self.style
         }
@@ -129,7 +129,7 @@ class ProfileView(LoginRequiredMixin, APIView):
             self.password_update_serializer.save()
             self.password_updated = True
             update_session_auth_hash(self.request, self.request.user)
-        elif update_type == 'phone_number' and self.add_phone_number_serializer.is_valid():
+        elif update_type == 'add_phone_number' and self.add_phone_number_serializer.is_valid():
             self.add_phone_number_serializer.save()
             self.phone_number_updated = True
 
