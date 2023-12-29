@@ -23,6 +23,7 @@ class Command(BaseCommand):
             Country.objects.update_or_create(
                 alpha3_code=country.alpha_3,
                 defaults={
+                    'alpha2_code': country.alpha_2,
                     'name': country.name
                 }
             )
