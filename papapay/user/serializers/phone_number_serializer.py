@@ -8,7 +8,7 @@ from papapay.postal_address.models import Country
 USER_CONTENT_TYPE = ContentType.objects.get(app_label='user', model='user')
 
 
-class AddPhoneNumberSerializer(serializers.Serializer):
+class PhoneNumberSerializer(serializers.Serializer):
     name = serializers.CharField()
     phone_number = serializers.CharField()
 
