@@ -1,12 +1,8 @@
-from django.contrib.contenttypes.models import ContentType
-
 from rest_framework import serializers
 
 from papapay.common.models import PhoneNumber
-from papapay.common.utils import remove_prefix
+from papapay.common.utils import get_user_content_type, remove_prefix
 from papapay.postal_address.models import Country
-
-USER_CONTENT_TYPE = ContentType.objects.get(app_label='user', model='user')
 
 
 class PhoneNumberSerializer(serializers.Serializer):
@@ -27,7 +23,7 @@ class PhoneNumberSerializer(serializers.Serializer):
             country=country,
             phone_number=remove_prefix(args[0]['phone_number'], country.international_call_prefix),
             owner_id=self.user.id,
-            owner_type=USER_CONTENT_TYPE
+            owner_type=get_user_content_type()
         )
         return phone_number
 

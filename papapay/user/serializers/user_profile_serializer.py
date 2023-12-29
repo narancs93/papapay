@@ -1,12 +1,11 @@
 from django.contrib.auth import get_user_model
-from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
 
 from papapay.common.models import PhoneNumber
+from papapay.common.utils import get_user_content_type
 
 User = get_user_model()
-USER_CONTENT_TYPE = ContentType.objects.get(app_label='user', model='user')
 
 
 class PhoneNumberChoice:
@@ -58,7 +57,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             user = User.objects.get(email=self.initial_data.get('email'))
             self.fields['phone_numbers'].choices = [
                 PhoneNumberChoice(phone_number) for phone_number
-                in PhoneNumber.objects.filter(owner_id=user.id, owner_type=USER_CONTENT_TYPE)
+                in PhoneNumber.objects.filter(owner_id=user.id, owner_type=get_user_content_type())
             ]
         except User.DoesNotExist:
             self.fields['phone_numbers'].choices = []
@@ -87,10 +86,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         super().save(*args, **kwargs)
 
         user = User.objects.get(email=self.validated_data['email'])
-        current_phone_numbers = list(PhoneNumber.objects.filter(owner_id=user.id, owner_type=USER_CONTENT_TYPE))
+        current_phone_numbers = list(PhoneNumber.objects.filter(owner_id=user.id, owner_type=get_user_content_type()))
         updated_phone_numbers = [phone_number for phone_number in self.validated_data['phone_numbers']]
 
         phone_number_ids_to_remove = [pn.id for pn in current_phone_numbers if pn not in updated_phone_numbers]
         PhoneNumber.objects.filter(
             id__in=phone_number_ids_to_remove,
-            owner_type=USER_CONTENT_TYPE, owner_id=user.id).delete()
+            owner_type=get_user_content_type(), owner_id=user.id).delete()
