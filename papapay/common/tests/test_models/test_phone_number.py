@@ -32,3 +32,9 @@ class PhoneNumberTest(BaseSetupTest):
         actual = str(self.phone_number_without_prefix)
 
         self.assertEqual(expected, actual)
+
+    def test_repr(self):
+        expected = 'Example Phone Number (+1 6059713695)'
+        actual = repr(self.phone_number)
+
+        self.assertEqual(expected, actual)
