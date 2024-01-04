@@ -4,12 +4,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 
+from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from papapay.common.models import PhoneNumber
+
 from .serializers import (LoginSerializer, PasswordUpdateSerializer,
-                          SignupSerializer, UserProfileSerializer)
+                          PhoneNumberSerializer, SignupSerializer,
+                          UserProfileSerializer)
 
 User = get_user_model()
 
@@ -72,23 +76,33 @@ class ProfileView(LoginRequiredMixin, APIView):
         return Response({
             'profile_serializer': self.get_profile_serializer(request.user),
             'password_update_serializer': PasswordUpdateSerializer(),
+            'add_phone_number_serializer': PhoneNumberSerializer(),
+            'update_phone_number_serializer': PhoneNumberSerializer(),
+            'remove_phone_number_from_profile_api': reverse('papapay.user:remove-phone-number-from-profile-api'),
             'style': self.style
         })
 
     def post(self, request):
-        update_type = request.POST.get('_update_type')
+        update_type = request.data.get('_update_type')
 
         self.initialize_serializers(request)
         self.initialize_flags()
         self.perform_update(update_type)
 
         response_data = {
-            'profile_serializer': self.profile_serializer if update_type == 'profile' else
-            self.get_profile_serializer(request.user),
-            'profile_was_updated': self.profile_updated,
-            'password_update_serializer': self.password_update_serializer if update_type == 'password' else
-            PasswordUpdateSerializer(),
-            'password_was_updated': self.password_updated,
+            'profile_serializer':
+                self.profile_serializer if update_type == 'profile' else self.get_profile_serializer(request.user),
+            'profile_was_updated':
+                self.profile_updated,
+            'password_update_serializer':
+                self.password_update_serializer if update_type == 'password' else PasswordUpdateSerializer(),
+            'password_was_updated':
+                self.password_updated,
+            'add_phone_number_serializer':
+                self.add_phone_number_serializer if update_type == 'add_phone_number' else PhoneNumberSerializer(),
+            'update_phone_number_serializer':
+                self.update_phone_number_serializer if
+                update_type == 'update_phone_number' else PhoneNumberSerializer(),
             'style': self.style
         }
         return Response(response_data)
@@ -105,18 +119,46 @@ class ProfileView(LoginRequiredMixin, APIView):
     def initialize_serializers(self, request):
         self.profile_serializer = UserProfileSerializer(instance=request.user, data=request.data)
         self.password_update_serializer = PasswordUpdateSerializer(instance=request.user, data=request.data)
+        self.add_phone_number_serializer = PhoneNumberSerializer(
+            user=request.user, alpha2_code=request.data.get('alpha2_code'), data=request.data)
+
+        phone_number_id = request.data.get('phone_number_id')
+        if phone_number_id:
+            phone_number = PhoneNumber.objects.get(id=phone_number_id)
+            self.update_phone_number_serializer = PhoneNumberSerializer(
+                instance=phone_number,
+                user=request.user,
+                alpha2_code=request.data.get('alpha2_code'),
+                data=request.data
+            )
 
     def initialize_flags(self):
         self.profile_updated = False
         self.password_updated = False
 
     def perform_update(self, update_type):
-        if update_type == 'profile':
-            if self.profile_serializer.is_valid():
-                self.profile_serializer.save()
-                self.profile_updated = True
-        elif update_type == 'password':
-            if self.password_update_serializer.is_valid():
-                self.password_update_serializer.save()
-                self.password_updated = True
-                update_session_auth_hash(self.request, self.request.user)
+        if update_type == 'profile' and self.profile_serializer.is_valid():
+            self.profile_serializer.save()
+            self.profile_updated = True
+        elif update_type == 'password' and self.password_update_serializer.is_valid():
+            self.password_update_serializer.save()
+            self.password_updated = True
+            update_session_auth_hash(self.request, self.request.user)
+        elif update_type == 'add_phone_number' and self.add_phone_number_serializer.is_valid():
+            self.add_phone_number_serializer.save()
+        elif update_type == 'update_phone_number' and self.update_phone_number_serializer.is_valid():
+            self.update_phone_number_serializer.save()
+
+
+class RemovePhoneNumberFromUser(APIView):
+
+    def post(self, request):
+        phone_number_id = request.data.get('phone_number_id')
+
+        if phone_number_id:
+            phone_number = PhoneNumber.objects.filter(id=phone_number_id)
+            if phone_number.exists() and phone_number[0].owner == request.user:
+                phone_number[0].delete()
+                return Response('Phone number deleted successfully.', status=status.HTTP_200_OK)
+
+        return Response('Invalid request', status=status.HTTP_400_BAD_REQUEST)

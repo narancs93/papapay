@@ -5,8 +5,8 @@ from .models import City, Country, District, PostalAddress, State, Street
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'alpha3_code')
-    search_fields = ('name', 'alpha3_code')
+    list_display = ('id', 'name', 'alpha2_code', 'alpha3_code')
+    search_fields = ('name', 'alpha2_code', 'alpha3_code')
 
 
 @admin.register(State)
