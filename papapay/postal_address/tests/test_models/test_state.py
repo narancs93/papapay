@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 
 from papapay.postal_address.models import State
 
-from .base_setup_test import BaseSetupTest
+from papapay.common.tests.base_setup_test import BaseSetupTest
 
 
 class StateTest(BaseSetupTest):
@@ -39,7 +39,7 @@ class StateTest(BaseSetupTest):
         self.assertEqual(state.area_code, '')
 
     def test_str(self):
-        expected = f'Example State (Example Country) (id={self.state.id})'
+        expected = f'Example State (United States of America) (id={self.state.id})'
         actual = str(self.state)
 
         self.assertEqual(expected, actual)

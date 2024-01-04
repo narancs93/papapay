@@ -1,9 +1,10 @@
 from django.test import TestCase
 
 from papapay.common.models import PhoneNumber
-from papapay.postal_address.models import Country
+from papapay.postal_address.models import (City, Country, District,
+                                           PostalAddress, State, Street)
 from papapay.postal_address.utils import create_postal_address
-from papapay.restaurant.models import Restaurant
+from papapay.restaurant.models import Restaurant, SocialMediaAccount
 
 
 class BaseSetupTest(TestCase):
@@ -14,6 +15,32 @@ class BaseSetupTest(TestCase):
         self.country_without_prefix = Country.objects.create(
             name='Example Country', alpha3_code='EXA')
 
+        self.state = State.objects.create(
+            name='Example State',
+            abbreviation='AB',
+            area_code='A-001',
+            country=self.country)
+
+        self.city = City.objects.create(
+            name='Example City',
+            state=self.state)
+
+        self.district = District.objects.create(
+            name='Example District',
+            city=self.city)
+
+        self.street = Street.objects.create(
+            name='Example Street',
+            zip_code='ZIP123',
+            district=self.district)
+
+        self.postal_address = PostalAddress.objects.create(
+            street=self.street,
+            house_number='1',
+            floor_number='2',
+            door_number='3',
+            note='Example Note')
+
         self.postal_address = create_postal_address(
             country_name='United States of America',
             state_name='California',
@@ -21,7 +48,9 @@ class BaseSetupTest(TestCase):
             district_name='Sunset District',
             street_zip_code='94116',
             street_name='31st Ave',
-            house_number='1234')
+            house_number='1234',
+            floor_number='2',
+            door_number='3',)
 
         self.restaurant = Restaurant.objects.create(
             name='Example Restaurant',
@@ -41,3 +70,9 @@ class BaseSetupTest(TestCase):
             country=self.country_without_prefix,
             phone_number='6059713600',
             owner=self.restaurant)
+
+        self.social_media_account = SocialMediaAccount.objects.create(
+                restaurant=self.restaurant,
+                platform='facebook',
+                username='example_username'
+            )
