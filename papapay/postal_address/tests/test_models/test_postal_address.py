@@ -1,8 +1,7 @@
 from django.core.exceptions import ValidationError
 
+from papapay.common.tests.base_setup_test import BaseSetupTest
 from papapay.postal_address.models import PostalAddress
-
-from .base_setup_test import BaseSetupTest
 
 
 class PostalAddressTest(BaseSetupTest):
@@ -42,7 +41,7 @@ class PostalAddressTest(BaseSetupTest):
         self.assertEqual(postal_address.note, '')
 
     def test_str(self):
-        expected = f'Example Street, 1, 2/3 (id={self.postal_address.id})'
+        expected = f'31st Ave, 1234, 2/3 (id={self.postal_address.id})'
         actual = str(self.postal_address)
 
         self.assertEqual(expected, actual)

@@ -1,8 +1,11 @@
 from django.test import Client, TestCase
 from django.urls import reverse
 
+from papapay.common.models import Country, PhoneNumber
+from papapay.common.utils import get_user_content_type
 from papapay.user.models import User
-from papapay.user.serializers import PasswordUpdateSerializer, UserProfileSerializer
+from papapay.user.serializers import (PasswordUpdateSerializer,
+                                      UserProfileSerializer)
 
 
 class ProfileViewTest(TestCase):
@@ -17,6 +20,18 @@ class ProfileViewTest(TestCase):
             first_name=self.first_name,
             last_name=self.last_name,
             password=self.password)
+
+        self.country = Country.objects.create(
+            name='United States of America',
+            alpha2_code='US',
+            alpha3_code='USA',
+            international_call_prefix='+1')
+
+        self.phone_number = PhoneNumber.objects.create(
+            name='Example Phone Number for Example User',
+            country=self.country,
+            phone_number='1234556787',
+            owner=self.user)
 
         self.client = Client()
         self.client.login(email=self.email, password=self.password)
@@ -139,3 +154,36 @@ class ProfileViewTest(TestCase):
         self.assert_common_profile_page_assertions(response)
 
         self.assertIn('Password fields didn\'t match.', validation_errors['new_password'])
+
+    def test_add_phone_number_POST(self):
+        post_data = {
+            '_update_type': 'add_phone_number',
+            'name': 'Example Phone Number',
+            'phone_number': '12345678',
+            'alpha2_code': 'us',
+        }
+        response = self.client.post(self.profile_url, data=post_data)
+        user_content_type = get_user_content_type()
+        phone_numbers = PhoneNumber.objects.filter(owner_id=self.user.id, owner_type=user_content_type) \
+            .values_list('country__alpha2_code', 'phone_number')
+
+        self.assertEquals(response.status_code, 200)
+        self.assertIn((post_data['alpha2_code'].upper(), post_data['phone_number']), phone_numbers)
+
+    def test_update_phone_number_POST(self):
+        post_data = {
+            '_update_type': 'update_phone_number',
+            'name': 'Example Phone Number',
+            'phone_number': '99999999',
+            'alpha2_code': 'us',
+            'phone_number_id': self.phone_number.id
+        }
+        previous_phone_number = (self.phone_number.country.alpha2_code.upper(), self.phone_number.phone_number)
+        response = self.client.post(self.profile_url, data=post_data)
+        user_content_type = get_user_content_type()
+        phone_numbers = PhoneNumber.objects.filter(owner_id=self.user.id, owner_type=user_content_type) \
+            .values_list('country__alpha2_code', 'phone_number')
+
+        self.assertEquals(response.status_code, 200)
+        self.assertIn((post_data['alpha2_code'].upper(), post_data['phone_number']), phone_numbers)
+        self.assertNotIn(previous_phone_number, phone_numbers)
