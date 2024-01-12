@@ -2,4 +2,7 @@
     "emmet.includeLanguages": {
         "django-html": "html",
    },
+   "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+  },
 }
