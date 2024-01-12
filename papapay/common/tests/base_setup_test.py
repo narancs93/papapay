@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from papapay.common.models import PhoneNumber
@@ -6,11 +7,24 @@ from papapay.postal_address.models import (City, Country, District,
 from papapay.postal_address.utils import create_postal_address
 from papapay.restaurant.models import Restaurant, SocialMediaAccount
 
+User = get_user_model()
+
 
 class BaseSetupTest(TestCase):
     def setUp(self):
+        self.user = User.objects.create(
+            first_name='Example',
+            last_name='User',
+            email='example.user@example.com')
+
         self.country = Country.objects.create(
             name='United States of America', alpha3_code='USA', international_call_prefix='+1')
+
+        PhoneNumber.objects.create(
+            name='Example Phone Number for Example User',
+            country=self.country,
+            phone_number='1234556787',
+            owner=self.user)
 
         self.country_without_prefix = Country.objects.create(
             name='Example Country', alpha3_code='EXA')
