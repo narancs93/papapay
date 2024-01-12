@@ -18,9 +18,9 @@ class BaseSetupTest(TestCase):
             email='example.user@example.com')
 
         self.country = Country.objects.create(
-            name='United States of America', alpha3_code='USA', international_call_prefix='+1')
+            name='United States of America', alpha2_code='US', alpha3_code='USA', international_call_prefix='+1')
 
-        PhoneNumber.objects.create(
+        self.user_phone_number = PhoneNumber.objects.create(
             name='Example Phone Number for Example User',
             country=self.country,
             phone_number='1234556787',
