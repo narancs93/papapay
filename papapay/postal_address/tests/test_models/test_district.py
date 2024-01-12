@@ -1,8 +1,7 @@
 from django.core.exceptions import ValidationError
 
-from papapay.postal_address.models import District
-
 from papapay.common.tests.base_setup_test import BaseSetupTest
+from papapay.postal_address.models import District
 
 
 class DistrictTest(BaseSetupTest):
