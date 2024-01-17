@@ -1,0 +1,79 @@
+<body class="antialiased bg-white">
+  <div>
+    <nav x-data="{ open: false }" @keydown.window.escape="open = false" class="bg-transparent">
+
+      <div class="container px-6 mx-auto lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center justify-between flex-grow">
+
+            <div class="flex-shrink-0">
+              <h1 class="text-lg font-semibold tracking-widest text-gray-700 uppercase">
+                <a class="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="{% url "papapay.management:management-page" %}">
+                  <!-- Icon from: http://www.potlabicons.com/ -->
+                  <svg class="h-8 w-8 text-gray-700 inline" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" />
+                    <circle cx="7" cy="17" r="2" />
+                    <circle cx="17" cy="17" r="2" />
+                    <path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" />
+                    <line x1="3" y1="9" x2="7" y2="9" />
+                  </svg> PAPAPAY
+                </a>
+              </h1>
+            </div>
+
+            <!-- Desktop menu -->
+            <div class="hidden lg:block">
+              <div class="flex items-center">
+                <a href="#" class="flex flex-row items-center px-3 py-2 ml-4 text-sm font-medium text-white bg-gray-700 rounded-md hover:text-gray-700 hover:bg-white focus:outline-none focus:text-gray-700 focus:bg-white">
+                  <span class="ml-2">Manage restaurants</span>
+                </a>
+    
+                <a href="#" class="flex flex-row items-center px-3 py-2 ml-4 text-sm font-medium text-white bg-gray-700 rounded-md hover:text-gray-700 hover:bg-white focus:outline-none focus:text-gray-700 focus:bg-white">
+                  <span class="ml-2">Manage menu</span>
+                </a>
+    
+                <a href="#" class="flex flex-row items-center px-3 py-2 ml-4 text-sm font-medium text-white bg-gray-700 rounded-md hover:text-gray-700 hover:bg-white focus:outline-none focus:text-gray-700 focus:bg-white">
+                  <span class="ml-2">Manage orders</span>
+                </a>
+              </div>
+            </div>
+            <!-- Desktop menu end -->
+          </div>
+
+          <div class="flex -mr-2 lg:hidden">
+            <button @click="open = !open" class="inline-flex items-center justify-center p-2 text-gray-900 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white" x-bind:aria-label="open ? 'Close main menu' : 'Main menu'" x-bind:aria-expanded="open">
+              <svg class="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <path :class="{'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                <path :class="{'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile menu -->
+      <div :class="{'block': open, 'hidden': !open}" class="hidden lg:hidden">
+        <div class="container px-6 mx-auto">
+          <div class="pt-2 pb-3">
+
+            <a href="#" class="flex flex-row items-center px-3 py-2 mt-1 text-base font-medium text-white bg-gray-700 rounded-md hover:text-gray-700 hover:bg-white focus:outline-none focus:text-gray-700 focus:bg-white">
+              <span class="ml-2">Manage restaurants</span>
+            </a>
+
+            <a href="#" class="flex flex-row items-center px-3 py-2 mt-1 text-base font-medium text-white bg-gray-700 rounded-md hover:text-gray-700 hover:bg-white focus:outline-none focus:text-gray-700 focus:bg-white">
+              <span class="ml-2">Manage menu</span>
+            </a>
+
+            <a href="#" class="flex flex-row items-center px-3 py-2 mt-1 text-base font-medium text-white bg-gray-700 rounded-md hover:text-gray-700 hover:bg-white focus:outline-none focus:text-gray-700 focus:bg-white">
+              <span class="ml-2">Manage orders</span>
+            </a>
+
+          </div>
+        </div>
+      </div>
+      <!-- Mobile menu end -->
+
+      <hr class="border-b border-gray-100 opacity-25 my-0 py-0">
+    </nav>
+  </div>
+</body>

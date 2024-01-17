@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('papapay.home.urls')),
     path('user/', include('papapay.user.urls')),
+    path('management/', include('papapay.management.urls')),
 ]
