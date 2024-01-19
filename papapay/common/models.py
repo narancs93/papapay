@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -28,3 +29,15 @@ class PhoneNumber(models.Model):
             models.Index(fields=["owner_id", "owner_id"]),
         ]
         unique_together = ('country', 'phone_number')
+
+
+class PageAccess(models.Model):
+    app_name = models.CharField(max_length=150)
+    url_name = models.CharField(max_length=150)
+    permissions = models.ManyToManyField(Permission)
+
+    def __str__(self):
+        return f'{self.app_name}.{self.url_name} (id={self.id})'
+
+    class Meta:
+        verbose_name_plural = 'Page accesses'
