@@ -1,3 +1,3 @@
-from .page_accesses import groups
+from .page_accesses import groups, page_accesses, permissions
 
-_all__ = [groups]
+_all__ = [groups, page_accesses, permissions]
