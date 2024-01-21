@@ -5,8 +5,8 @@ from papapay.postal_address.models import PostalAddress
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    description = models.TextField()
-    introduction = models.TextField()
+    description = models.TextField(blank=True)
+    introduction = models.TextField(blank=True)
     email_address = models.EmailField()
     postal_address = models.ForeignKey(PostalAddress, related_name='restaurants', on_delete=models.PROTECT)
 
