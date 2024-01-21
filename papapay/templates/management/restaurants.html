@@ -1,9 +1,53 @@
-{% extends "management/base.html" %}
+{% extends 'management/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-<div class="flex flex-col justify-center items-center h-screen">
-    <div>Restaurants</div>
-    <div>{{ restaurant_count }}</div>
-</div>
-
-{% endblock content %}
+  <div class="flex flex-col items-center h-full m-2">
+    <div class="pt-8">
+      <h1 class="text-2xl font-bold py-4 text-center">Restaurants</h1>
+      {% if not restaurants %}
+        There are no restaurants created yet. Click here to add a new one.
+      {% else %}
+      <table class="min-w-full leading-normal">
+        <thead>
+          <tr>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Name</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Email address</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Postal Address</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for restaurant in restaurants %}
+          <tr>
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+              <div class="flex">
+                <div class="ml-3">
+                  <p class="text-gray-900 whitespace-no-wrap">{{ restaurant.name }}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+              <p class="text-gray-900 whitespace-no-wrap">{{ restaurant.email_address }}</p>
+            </td>
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+              <p class="text-gray-900 whitespace-no-wrap">{{ restaurant.postal_address.full_address }}</p>
+            </td>
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+              <a href="{% url "papapay.management:update-restaurant" id=restaurant.id %}">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  Update
+                </button>
+              </a>
+              <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                Delete
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

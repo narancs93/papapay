@@ -96,5 +96,11 @@ class PostalAddress(models.Model):
     def __str__(self):
         return f'{self.street.name}, {self.house_number}, {self.floor_number}/{self.door_number} (id={self.id})'
 
+    @property
+    def full_address(self):
+        # 1150 Broadway, New York, NY 10001, Egyesült Államok
+        return f'{self.house_number} {self.street.name}, {self.street.district.city.name}, \
+{self.street.district.city.state.abbreviation} {self.street.zip_code}, {self.street.district.city.state.country.name}'
+
     class Meta:
         verbose_name_plural = 'Postal Addresses'
