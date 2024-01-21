@@ -1,5 +1,9 @@
 permissions = [
     {
+        'codename': 'management_read_only',
+        'description': 'Can access /management pages',
+    },
+    {
         'codename': 'manage_restaurant',
         'description': 'Can add/change/delete/view restaurants',
     },
@@ -14,14 +18,16 @@ permissions = [
 ]
 
 groups = {
-    'management': ['manage_restaurant', 'manage_menu', 'manage_order'],
+    'management': ['management_read_only', 'manage_restaurant', 'manage_menu', 'manage_order'],
+    'management_read_only': ['management_read_only'],
     'chef': ['manage_order']
 }
 
-page_accesses = [
-    {
-        'app_name': 'papapay.restaurant',
-        'url_name': 'manage-restaurants',
-        'permissions': ['manage_restaurant']
-    }
-]
+page_accesses = {
+    'papapay.management': {
+        'management-page': ['management_read_only'],
+        'manage-restaurants': ['management_read_only', 'manage_restaurant'],
+        'manage-menus': ['management_read_only', 'manage_menu'],
+        'manage-orders': ['management_read_only', 'manage_order'],
+    },
+}

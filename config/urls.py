@@ -17,7 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from papapay.common.views import PermissionDeniedPage
+
 urlpatterns = [
+    path('forbidden', PermissionDeniedPage.as_view(), name='403-page'),
     path('admin/', admin.site.urls),
     path('', include('papapay.home.urls')),
     path('user/', include('papapay.user.urls')),

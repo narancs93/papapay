@@ -63,12 +63,13 @@ class Command(BaseCommand):
             group.save()
 
     def load_page_accesses(self):
-        for page_access in page_accesses:
-            access, _ = PageAccess.objects.get_or_create(
-                app_name=page_access['app_name'],
-                url_name=page_access['url_name']
-            )
+        for app_name, accesses in page_accesses.items():
+            for url_name, permission_names in accesses.items():
+                access, _ = PageAccess.objects.get_or_create(
+                    app_name=app_name,
+                    url_name=url_name
+                )
 
-            for permission_name in page_access['permissions']:
-                permission = Permission.objects.get(codename=permission_name)
-                access.permissions.add(permission)
+                for permission_name in permission_names:
+                    permission = Permission.objects.get(codename=permission_name)
+                    access.permissions.add(permission)
