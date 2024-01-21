@@ -10,3 +10,4 @@ filename = *.py
 accept-encodings = utf-8
 inline-quotes = single
 multiline-quotes = double
+import-order-style = pycharm
