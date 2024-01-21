@@ -3,17 +3,15 @@ from django.contrib.auth import (get_user_model, login, logout,
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
-
 from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from papapay.common.models import PhoneNumber
-
 from .serializers import (LoginSerializer, PasswordUpdateSerializer,
                           PhoneNumberSerializer, SignupSerializer,
                           UserProfileSerializer)
+from ..common.models import PhoneNumber
 
 User = get_user_model()
 
