@@ -79,7 +79,7 @@ class Street(models.Model):
         return f'{self.name} ({self.district.name}) (id={self.id})'
 
     class Meta:
-        unique_together = ('name', 'district')
+        unique_together = ('zip_code', 'name', 'district')
 
 
 class PostalAddress(models.Model):
