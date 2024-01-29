@@ -2,12 +2,23 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Field, Layout, Submit
 from django import forms
 
+from papapay.postal_address.models import Country
 from papapay.restaurant.models import Restaurant
 
 
 class RestaurantForm(forms.ModelForm):
+    country = forms.ChoiceField(choices=[])
+    state = forms.CharField(max_length=255)
+    zip_code = forms.CharField(max_length=16)
+    city = forms.CharField(max_length=255)
+    district = forms.CharField(max_length=255, required=False)
+    street = forms.CharField(max_length=255)
+    house_number = forms.CharField(max_length=255)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['country'].choices = [
+            (country.name, country.name) for country in Country.objects.all().order_by('name')]
         self.helper = FormHelper()
         self.helper.form_id = 'update-restaurant-form'
         self.helper.form_method = 'post'
@@ -18,6 +29,13 @@ class RestaurantForm(forms.ModelForm):
             Field('email_address', css_class='mt-2 mb-4'),
             Field('description', css_class='mt-2 mb-4'),
             Field('introduction', css_class='mt-2 mb-4'),
+            Field('country', css_class='mt-2 mb-4'),
+            Field('state', css_class='mt-2 mb-4'),
+            Field('zip_code', css_class='mt-2 mb-4'),
+            Field('city', css_class='mt-2 mb-4'),
+            Field('district', css_class='mt-2 mb-4'),
+            Field('street', css_class='mt-2 mb-4'),
+            Field('house_number', css_class='mt-2 mb-4'),
         )
 
         self.fields['description'].required = False
@@ -30,4 +48,4 @@ class RestaurantForm(forms.ModelForm):
 
     class Meta:
         model = Restaurant
-        fields = ['name', 'email_address', 'description', 'introduction']
+        fields = ['name', 'email_address', 'description', 'introduction', 'postal_address']

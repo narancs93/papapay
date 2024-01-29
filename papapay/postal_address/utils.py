@@ -55,11 +55,9 @@ def create_postal_address(*,
     )
 
     street, _ = Street.objects.get_or_create(
+        zip_code=street_zip_code,
         district=district,
         name=street_name,
-        defaults={
-            'zip_code': street_zip_code
-        }
     )
 
     postal_address, _ = PostalAddress.objects.get_or_create(
