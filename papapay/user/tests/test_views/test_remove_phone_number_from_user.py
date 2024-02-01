@@ -1,8 +1,8 @@
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from papapay.common.models import Country, PhoneNumber
-from papapay.user.models import User
+from ....common.models import Country, PhoneNumber
+from ....user.models import User
 
 
 class RemovePhoneNumberFromUserTest(TestCase):

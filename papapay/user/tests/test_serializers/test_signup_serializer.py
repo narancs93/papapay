@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from papapay.user.serializers import SignupSerializer
+from ....user.serializers import SignupSerializer
 
 User = get_user_model()
 

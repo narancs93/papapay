@@ -1,11 +1,11 @@
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from papapay.common.models import Country, PhoneNumber
-from papapay.common.utils import get_user_content_type
-from papapay.user.models import User
-from papapay.user.serializers import (PasswordUpdateSerializer,
-                                      UserProfileSerializer)
+from ....common.models import Country, PhoneNumber
+from ....common.utils import get_user_content_type
+from ....user.models import User
+from ....user.serializers import (PasswordUpdateSerializer,
+                                  UserProfileSerializer)
 
 
 class ProfileViewTest(TestCase):

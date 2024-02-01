@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 
-from papapay.common.tests.base_setup_test import BaseSetupTest
-from papapay.restaurant.models import Restaurant
+from ....common.tests.base_setup_test import BaseSetupTest
+from ....restaurant.models import Restaurant
 
 
 class RestaurantTest(BaseSetupTest):

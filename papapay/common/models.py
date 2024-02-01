@@ -3,7 +3,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-from papapay.postal_address.models import Country
+from ..postal_address.models import Country
 
 
 class PhoneNumber(models.Model):
