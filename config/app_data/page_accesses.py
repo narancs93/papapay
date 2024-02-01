@@ -27,6 +27,9 @@ page_accesses = {
     'papapay.management': {
         'management-page': ['management_read_only'],
         'manage-restaurants': ['management_read_only', 'manage_restaurant'],
+        'create-restaurant': ['manage_restaurant'],
+        'update-restaurant': ['manage_restaurant'],
+        'delete-restaurant-api': ['manage_restaurant'],
         'manage-menus': ['management_read_only', 'manage_menu'],
         'manage-orders': ['management_read_only', 'manage_order'],
     },
