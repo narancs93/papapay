@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from papapay.postal_address.utils import create_postal_address
 
@@ -12,13 +12,10 @@ class Index(TemplateView):
     template_name = 'management/index.html'
 
 
-class ManageRestaurants(TemplateView):
+class ManageRestaurants(ListView):
     template_name = 'management/restaurants.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['restaurants'] = Restaurant.objects.all()
-        return context
+    model = Restaurant
+    context_object_name = 'restaurants'
 
 
 class CreateRestaurant(TemplateView):
