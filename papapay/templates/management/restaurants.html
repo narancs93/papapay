@@ -45,7 +45,7 @@
               <p class="text-gray-900 whitespace-no-wrap">{{ restaurant.postal_address.full_address }}</p>
             </td>
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-              <a href="{% url "papapay.management:update-restaurant" id=restaurant.id %}">
+              <a href="{% url "papapay.management:update-restaurant" pk=restaurant.id %}">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                   Update
                 </button>

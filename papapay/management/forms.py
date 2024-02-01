@@ -17,6 +17,7 @@ class RestaurantForm(forms.ModelForm):
     house_number = forms.CharField(max_length=255)
 
     def __init__(self, *args, **kwargs):
+        self.add_address_data_to_kwargs(kwargs)
         super().__init__(*args, **kwargs)
         self.fields['country'].choices = [
             (country.name, country.name) for country in Country.objects.all().order_by('name')]
@@ -59,6 +60,18 @@ class RestaurantForm(forms.ModelForm):
             )
         self.instance.postal_address = address
 
+    def add_address_data_to_kwargs(self, kwargs):
+        restaurant = kwargs.get('instance', None)
+        if restaurant:
+            kwargs.update(initial={
+                'country': restaurant.country,
+                'state': restaurant.state,
+                'city': restaurant.city,
+                'district': restaurant.district,
+                'zip_code': restaurant.zip_code,
+                'street': restaurant.street,
+                'house_number': restaurant.house_number,
+            })
 
     class Meta:
         model = Restaurant
