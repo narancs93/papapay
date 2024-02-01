@@ -1,5 +1,5 @@
-from papapay.postal_address.models import (City, Country, District,
-                                           PostalAddress, State, Street)
+from ..postal_address.models import (City, Country, District, PostalAddress,
+                                     State, Street)
 
 
 def create_postal_address(*,

@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from papapay.common.models import PhoneNumber
-from papapay.common.utils import get_user_content_type
+from ...common.models import PhoneNumber
+from ...common.utils import get_user_content_type
 
 User = get_user_model()
 

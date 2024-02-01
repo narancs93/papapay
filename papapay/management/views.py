@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
 
-from papapay.restaurant.models import Restaurant
+from ..restaurant.models import Restaurant
 
 
 class Index(TemplateView):

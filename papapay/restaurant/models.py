@@ -1,6 +1,6 @@
 from django.db import models
 
-from papapay.postal_address.models import PostalAddress
+from ..postal_address.models import PostalAddress
 
 
 class Restaurant(models.Model):

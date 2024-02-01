@@ -1,9 +1,8 @@
 from django.contrib.auth import get_user_model
 
-from papapay.common.tests.base_setup_test import BaseSetupTest
-from papapay.user.serializers import (PhoneNumberChoice,
-                                      PhoneNumbersChoiceField,
-                                      UserProfileSerializer)
+from ....common.tests.base_setup_test import BaseSetupTest
+from ....user.serializers import (PhoneNumberChoice, PhoneNumbersChoiceField,
+                                  UserProfileSerializer)
 
 User = get_user_model()
 

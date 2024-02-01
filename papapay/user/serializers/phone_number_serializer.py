@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from papapay.common.models import PhoneNumber
-from papapay.common.utils import get_user_content_type, remove_prefix
-from papapay.postal_address.models import Country
+from ...common.models import PhoneNumber
+from ...common.utils import get_user_content_type, remove_prefix
+from ...postal_address.models import Country
 
 
 class PhoneNumberSerializer(serializers.Serializer):
