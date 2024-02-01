@@ -3,6 +3,7 @@ from crispy_forms.layout import Field, Layout, Submit
 from django import forms
 
 from papapay.postal_address.models import Country
+from papapay.postal_address.utils import create_postal_address
 from papapay.restaurant.models import Restaurant
 
 
@@ -46,6 +47,19 @@ class RestaurantForm(forms.ModelForm):
             value='Save',
             css_class='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'))
 
+    def set_postal_address(self, post_data):
+        address = create_postal_address(
+            country_name=post_data.get('country'),
+            state_name=post_data.get('state'),
+            city_name=post_data.get('city'),
+            district_name=post_data.get('district') or '-',
+            street_zip_code=post_data.get('zip_code'),
+            street_name=post_data.get('street'),
+            house_number=post_data.get('house_number'),
+            )
+        self.instance.postal_address = address
+
+
     class Meta:
         model = Restaurant
-        fields = ['name', 'email_address', 'description', 'introduction', 'postal_address']
+        fields = ['name', 'email_address', 'description', 'introduction']
