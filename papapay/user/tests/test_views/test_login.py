@@ -2,8 +2,8 @@ from django.contrib import auth
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from papapay.user.models import User
-from papapay.user.serializers import LoginSerializer
+from ....user.models import User
+from ....user.serializers import LoginSerializer
 
 
 class TestLogin(TestCase):

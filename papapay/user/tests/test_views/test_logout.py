@@ -1,7 +1,7 @@
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from papapay.user.models import User
+from ....user.models import User
 
 
 class LogoutTest(TestCase):

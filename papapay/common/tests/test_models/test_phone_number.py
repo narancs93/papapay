@@ -1,7 +1,7 @@
 from django.db.utils import IntegrityError
 
-from papapay.common.models import PhoneNumber
 from ..base_setup_test import BaseSetupTest
+from ....common.models import PhoneNumber
 
 
 class PhoneNumberTest(BaseSetupTest):

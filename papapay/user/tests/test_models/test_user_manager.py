@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from papapay.user.models import UserManager
+from ....user.models import UserManager
 
 User = get_user_model()
 
