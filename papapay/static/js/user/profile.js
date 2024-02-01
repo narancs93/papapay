@@ -29,13 +29,11 @@ document.querySelectorAll('.phone-number-delete').forEach((element) => {
     element.addEventListener('click', (event) => {
         const apiEndpoint = JSON.parse(document.getElementById('remove-phone-number-url').textContent);
         const phoneNumberId = event.target.closest('.phone-number-delete').getAttribute('data-phone-number-id');
-        const csrfToken = document.getElementById('profile-update-form').querySelector('[name="csrfmiddlewaretoken"]').value;
 
         sendRequestToAPI({
             apiEndpoint: apiEndpoint,
             method: 'POST',
             contentType: 'application/json',
-            csrfToken: csrfToken,
             body: JSON.stringify({
                 phone_number_id: phoneNumberId
             })
@@ -136,7 +134,6 @@ document.getElementById('save-phone-number-button').addEventListener('click', ()
 
     const form = document.getElementById('add-phone-number-form');
     var formData = new FormData(form);
-    const csrfToken = document.getElementById('add-phone-number-form').querySelector('[name="csrfmiddlewaretoken"]').value;
 
     const data = {};
     formData.forEach(function(value, key){
@@ -148,7 +145,6 @@ document.getElementById('save-phone-number-button').addEventListener('click', ()
         apiEndpoint: location,
         method: 'POST',
         contentType: 'application/json',
-        csrfToken: csrfToken,
         body: JSON.stringify(data),
     })
     .then(() => {
