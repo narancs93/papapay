@@ -17,6 +17,34 @@ class Restaurant(models.Model):
     def __str__(self):
         return f'{self.name} (id={self.id})'
 
+    @property
+    def country(self):
+        return self.postal_address.street.district.city.state.country.name
+
+    @property
+    def state(self):
+        return self.postal_address.street.district.city.state.name
+
+    @property
+    def city(self):
+        return self.postal_address.street.district.city.name
+
+    @property
+    def district(self):
+        return self.postal_address.street.district.name
+
+    @property
+    def zip_code(self):
+        return self.postal_address.street.zip_code
+
+    @property
+    def street(self):
+        return self.postal_address.street.name
+
+    @property
+    def house_number(self):
+        return self.postal_address.house_number
+
 
 class SocialMediaAccount(models.Model):
     SOCIAL_MEDIA_CHOICES = [
