@@ -28,7 +28,7 @@ class RemovePhoneNumberFromUserTest(TestCase):
             name='Example Phone Number for Example User',
             country=country,
             phone_number='1234556787',
-            owner=self.user)
+            owner_person=self.user)
 
         self.client = Client()
         self.client.login(email=self.email, password=self.password)
