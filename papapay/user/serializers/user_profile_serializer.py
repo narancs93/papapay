@@ -79,16 +79,3 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
         if validation_errors:
             raise serializers.ValidationError(validation_errors)
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        user = User.objects.get(email=self.validated_data['email'])
-        current_phone_numbers = list(PhoneNumber.objects.filter(owner_person=user))
-        updated_phone_numbers = [phone_number for phone_number in self.validated_data.get('phone_numbers', [])]
-
-        phone_number_ids_to_remove = [pn.id for pn in current_phone_numbers if pn not in updated_phone_numbers]
-        PhoneNumber.objects.filter(
-            id__in=phone_number_ids_to_remove, owner_person=user).delete()
-
-        return user
