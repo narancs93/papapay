@@ -9,9 +9,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import (LoginSerializer, PasswordUpdateSerializer,
-                          PhoneNumberSerializer, SignupSerializer,
-                          UserProfileSerializer)
+                          SignupSerializer, UserProfileSerializer)
 from ..common.models import PhoneNumber
+from ..common.serializers import PhoneNumberSerializer
 
 User = get_user_model()
 

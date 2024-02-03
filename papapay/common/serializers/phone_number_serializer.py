@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from ...common.models import PhoneNumber
-from ...common.utils import get_user_content_type, remove_prefix
+from ..models import PhoneNumber
+from ..utils import get_user_content_type, remove_prefix
 from ...postal_address.models import Country
 
 

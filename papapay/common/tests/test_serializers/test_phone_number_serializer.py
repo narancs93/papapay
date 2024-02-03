@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 
-from ....common.tests.base_setup_test import BaseSetupTest
-from ....user.serializers import PhoneNumberSerializer
+from ..base_setup_test import BaseSetupTest
+from ...serializers import PhoneNumberSerializer
 
 User = get_user_model()
 
