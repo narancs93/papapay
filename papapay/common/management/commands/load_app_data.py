@@ -4,9 +4,9 @@ from django.core.management.base import BaseCommand
 from phonenumbers import country_code_for_region
 from pycountry import countries as py_countries
 
-from config.app_data import groups, page_accesses, permissions
-from papapay.common.models import PageAccess
-from papapay.postal_address.models import Country
+from ....common.models import PageAccess
+from ....postal_address.models import Country
+from .....config.app_data import groups, page_accesses, permissions
 
 
 class Command(BaseCommand):

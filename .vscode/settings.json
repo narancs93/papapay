@@ -1,5 +1,13 @@
 {
-    "emmet.includeLanguages": {
-        "django-html": "html",
-   }
+  "emmet.includeLanguages": {
+    "django-html": "html",
+  },
+  "isort.args": [
+    "--reverse-relative"
+  ],
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
 }

@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ..restaurant.models import Restaurant
 from .forms import RestaurantForm
+from ..restaurant.models import Restaurant
 
 
 class Index(TemplateView):

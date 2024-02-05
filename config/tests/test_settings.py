@@ -1,7 +1,7 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.test import SimpleTestCase
 
-from config.settings import get_env_variable
+from ..settings import get_env_variable
 
 
 class SettingsTest(SimpleTestCase):

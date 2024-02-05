@@ -1,7 +1,7 @@
 from django.test import SimpleTestCase
 from django.urls import resolve, reverse
 
-from papapay.user.views import LoginView, LogoutView, SignupView
+from ...user.views import LoginView, LogoutView, SignupView
 
 
 class TestUrls(SimpleTestCase):

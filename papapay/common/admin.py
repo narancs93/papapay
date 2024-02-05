@@ -5,7 +5,7 @@ from .models import PageAccess, PhoneNumber
 
 @admin.register(PhoneNumber)
 class PhoneNumberAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'country', 'phone_number', 'owner')
+    list_display = ('id', 'name', 'country', 'phone_number', 'owner_person', 'owner_restaurant')
     search_fields = ('name', 'phone_number')
 
 

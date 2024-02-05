@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 
-from papapay.common.utils import remove_prefix
+from ...common.utils import remove_prefix
 
 
 class UtilsTest(SimpleTestCase):
