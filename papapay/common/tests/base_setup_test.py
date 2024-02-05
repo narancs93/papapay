@@ -24,7 +24,7 @@ class BaseSetupTest(TestCase):
             name='Example Phone Number for Example User',
             country=self.country,
             phone_number='1234556787',
-            owner=self.user)
+            owner_person=self.user)
 
         self.country_without_prefix = Country.objects.create(
             name='Example Country', alpha3_code='EXA')
@@ -77,13 +77,13 @@ class BaseSetupTest(TestCase):
             name='Example Phone Number',
             country=self.country,
             phone_number='6059713695',
-            owner=self.restaurant)
+            owner_restaurant=self.restaurant)
 
         self.phone_number_without_prefix = PhoneNumber.objects.create(
             name='Example Phone Number without Prefix',
             country=self.country_without_prefix,
             phone_number='6059713600',
-            owner=self.restaurant)
+            owner_restaurant=self.restaurant)
 
         self.social_media_account = SocialMediaAccount.objects.create(
                 restaurant=self.restaurant,

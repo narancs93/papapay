@@ -2,7 +2,6 @@ from django.test import Client, TestCase
 from django.urls import reverse
 
 from ....common.models import Country, PhoneNumber
-from ....common.utils import get_user_content_type
 from ....user.models import User
 from ....user.serializers import (PasswordUpdateSerializer,
                                   UserProfileSerializer)
@@ -31,7 +30,7 @@ class ProfileViewTest(TestCase):
             name='Example Phone Number for Example User',
             country=self.country,
             phone_number='1234556787',
-            owner=self.user)
+            owner_person=self.user)
 
         self.client = Client()
         self.client.login(email=self.email, password=self.password)
@@ -163,8 +162,7 @@ class ProfileViewTest(TestCase):
             'alpha2_code': 'us',
         }
         response = self.client.post(self.profile_url, data=post_data)
-        user_content_type = get_user_content_type()
-        phone_numbers = PhoneNumber.objects.filter(owner_id=self.user.id, owner_type=user_content_type) \
+        phone_numbers = PhoneNumber.objects.filter(owner_person=self.user) \
             .values_list('country__alpha2_code', 'phone_number')
 
         self.assertEquals(response.status_code, 200)
@@ -180,8 +178,7 @@ class ProfileViewTest(TestCase):
         }
         previous_phone_number = (self.phone_number.country.alpha2_code.upper(), self.phone_number.phone_number)
         response = self.client.post(self.profile_url, data=post_data)
-        user_content_type = get_user_content_type()
-        phone_numbers = PhoneNumber.objects.filter(owner_id=self.user.id, owner_type=user_content_type) \
+        phone_numbers = PhoneNumber.objects.filter(owner_person=self.user) \
             .values_list('country__alpha2_code', 'phone_number')
 
         self.assertEquals(response.status_code, 200)

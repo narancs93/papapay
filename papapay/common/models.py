@@ -1,18 +1,32 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from ..postal_address.models import Country
+from ..restaurant.models import Restaurant
+
+User = get_user_model()
 
 
 class PhoneNumber(models.Model):
     name = models.CharField(max_length=64)
     country = models.ForeignKey(Country, related_name='phone_numbers', on_delete=models.PROTECT)
     phone_number = models.CharField(max_length=20)
-    owner_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    owner_id = models.PositiveIntegerField()
-    owner = GenericForeignKey("owner_type", "owner_id")
+    owner_person = models.ForeignKey(User, null=True, blank=True, on_delete=models.PROTECT)
+    owner_restaurant = models.ForeignKey(Restaurant, null=True, blank=True, on_delete=models.PROTECT)
+
+    @property
+    def owner(self):
+        if self.owner_person_id is not None:
+            return self.owner_person
+        elif self.owner_restaurant_id is not None:
+            return self.owner_restaurant
+        raise AssertionError("Neither 'owner_person' nor 'owner_restaurant' is set.")
+
+    def clean(self):
+        if self.owner_person and self.owner_restaurant:
+            raise ValidationError('A PhoneNumber cannot be associated with both a User and a Restaurant.')
 
     def get_international_call_prefix(self):
         return f'{self.country.international_call_prefix} ' if self.country and \
@@ -25,9 +39,6 @@ class PhoneNumber(models.Model):
         return f'{self.name} ({self.get_international_call_prefix()}{self.phone_number})'
 
     class Meta:
-        indexes = [
-            models.Index(fields=["owner_id", "owner_id"]),
-        ]
         unique_together = ('country', 'phone_number')
 
 

@@ -9,9 +9,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import (LoginSerializer, PasswordUpdateSerializer,
-                          PhoneNumberSerializer, SignupSerializer,
-                          UserProfileSerializer)
+                          SignupSerializer, UserProfileSerializer)
 from ..common.models import PhoneNumber
+from ..common.serializers import PhoneNumberSerializer
 
 User = get_user_model()
 
@@ -118,14 +118,14 @@ class ProfileView(LoginRequiredMixin, APIView):
         self.profile_serializer = UserProfileSerializer(instance=request.user, data=request.data)
         self.password_update_serializer = PasswordUpdateSerializer(instance=request.user, data=request.data)
         self.add_phone_number_serializer = PhoneNumberSerializer(
-            user=request.user, alpha2_code=request.data.get('alpha2_code'), data=request.data)
+            owner=request.user, alpha2_code=request.data.get('alpha2_code'), data=request.data)
 
         phone_number_id = request.data.get('phone_number_id')
         if phone_number_id:
             phone_number = PhoneNumber.objects.get(id=phone_number_id)
             self.update_phone_number_serializer = PhoneNumberSerializer(
                 instance=phone_number,
-                user=request.user,
+                owner=request.user,
                 alpha2_code=request.data.get('alpha2_code'),
                 data=request.data
             )
@@ -155,7 +155,7 @@ class RemovePhoneNumberFromUser(APIView):
 
         if phone_number_id:
             phone_number = PhoneNumber.objects.filter(id=phone_number_id)
-            if phone_number.exists() and phone_number[0].owner == request.user:
+            if phone_number.exists() and phone_number[0].owner_person == request.user:
                 phone_number[0].delete()
                 return Response('Phone number deleted successfully.', status=status.HTTP_200_OK)
 
