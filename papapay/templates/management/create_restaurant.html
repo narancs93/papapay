@@ -1,0 +1,28 @@
+{% extends "management/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="flex flex-col items-center h-full m-2">
+    
+    {% if updated_result == 'success' %}
+    <div class="bg-green-100 shadow-md rounded p-4 mt-4 flex flex-row text-green-500 border-t-4 border-green-500 w-1/4" role="alertdialog">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle ml-2 mr-4"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <div>
+          <p class="text-green-700">Update was successful.</p>
+        </div>
+    </div>
+    {% elif updated_result == 'error' %}
+    <div class="bg-red-100 shadow-md rounded p-4 mt-4 flex flex-row text-red-500 border-t-4 border-red-500 w-1/4" role="alertdialog">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle ml-2 mr-4"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+        <div>
+          <p class="text-red-700">Create was not successful.</p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="pt-6">
+        <h1 class="text-2xl font-bold py-4 text-center">Create restaurant</h1>
+
+        {% crispy form form.helper %}
+    </div>
+</div>
+{% endblock content %}

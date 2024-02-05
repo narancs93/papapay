@@ -1,10 +1,16 @@
-function sendRequestToAPI({apiEndpoint, method, contentType, csrfToken, body}) {
-    return new Promise(function(resolve, reject) {
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function sendRequestToAPI({ apiEndpoint, method, contentType, body }) {
+    return new Promise(function (resolve, reject) {
         fetch(apiEndpoint, {
             method: method,
             headers: {
                 'Content-Type': contentType,
-                'X-CSRFToken': csrfToken
+                'X-CSRFToken': getCookie('csrftoken')
             },
             body: body
         }).then(res => {

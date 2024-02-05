@@ -1,4 +1,5 @@
-from django.shortcuts import redirect
+from django.http import HttpResponseForbidden
+from django.template import loader
 from django.urls import resolve
 
 from papapay.common.models import PageAccess
@@ -13,7 +14,7 @@ class PermissionRequiredMiddleWare:
         required_permissions = self.get_required_permissions_for_view(requested_view)
 
         if not self.user_has_any_permission(request.user, required_permissions):
-            return redirect('/forbidden')
+            return HttpResponseForbidden(loader.render_to_string("403.html"))
 
         return self.get_response(request)
 
